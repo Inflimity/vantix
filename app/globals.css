@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  /* Legacy Theme Colors */
+  --background: #020617;
+  --foreground: #FFFFFF;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-jakarta: var(--font-jakarta);
+  --font-fraunces: var(--font-fraunces);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-jakarta), sans-serif;
+}
+
+.serif {
+  font-family: var(--font-fraunces), serif;
+}

@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String       @id @default(cuid())
+  email          String       @unique
+  password       String
+  fullName       String
+  balance        Decimal      @default(0.0)
+  totalEarned    Decimal      @default(0.0)
+  role           Role         @default(USER)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  investments    Investment[]
+  transactions   Transaction[]
+}
+
+model InvestmentPlan {
+  id             String       @id @default(cuid())
+  name           String
+  roiPercent     Decimal
+  cycleHours     Int
+  minDeposit     Decimal
+  maxDeposit     Decimal
+  investments    Investment[]
+}
+
+model Investment {
+  id             String         @id @default(cuid())
+  userId         String
+  user           User           @relation(fields: [userId], references: [id])
+  planId         String
+  plan           InvestmentPlan @relation(fields: [planId], references: [id])
+  amount         Decimal
+  status         InvestmentStatus @default(ACTIVE)
+  startDate      DateTime       @default(now())
+  endDate        DateTime
+  createdAt      DateTime       @default(now())
+}
+
+model Transaction {
+  id             String            @id @default(cuid())
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
+  type           TransactionType
+  amount         Decimal
+  status         TransactionStatus @default(PENDING)
+  gateway        String?
+  walletAddress  String?
+  createdAt      DateTime          @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum InvestmentStatus {
+  ACTIVE
+  COMPLETED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  EARNING
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}

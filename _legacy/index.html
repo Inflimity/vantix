@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vantix Crypto | Premium Rebrand</title>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link
@@ -73,10 +74,10 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button
-                    class="hidden sm:block bg-blue-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-500 transition">
+                <a href="login.html"
+                    class="hidden md:block bg-blue-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-blue-500 transition text-center">
                     Get Started
-                </button>
+                </a>
 
                 <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-white focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -104,9 +105,10 @@
                         class="py-3 text-gray-400 font-bold hover:text-emerald-400 border-b border-white/5">Offers</a>
                     <a href="#faq" @click="mobileMenuOpen = false"
                         class="py-3 text-gray-400 font-bold hover:text-emerald-400 border-b border-white/5">Support</a>
-                    <button class="bg-blue-600 text-white py-4 rounded-xl font-bold mt-2 shadow-lg shadow-blue-600/20">
+                    <a href="login.html" @click.stop="mobileMenuOpen = false"
+                        class="bg-blue-600 text-white py-4 rounded-xl font-black mt-2 shadow-lg shadow-blue-600/20 text-center block uppercase tracking-widest transition active:scale-95">
                         Get Started
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
