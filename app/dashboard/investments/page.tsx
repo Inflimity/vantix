@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
+import FormattedDate from "../../components/FormattedDate";
 import { processMaturedInvestments } from "@/actions/maturedInvestments";
 import Link from "next/link";
 
@@ -90,7 +91,7 @@ export default async function InvestmentsPage() {
                                             {inv.status === 'ACTIVE' ? 'Processing...' : 'Cycle Finished'}
                                         </div>
                                         <div className="text-[10px] text-gray-600">
-                                            End: {inv.endDate.toLocaleDateString()}
+                                            End: <FormattedDate date={inv.endDate} showTime={false} />
                                         </div>
                                     </td>
                                     <td className="p-6">

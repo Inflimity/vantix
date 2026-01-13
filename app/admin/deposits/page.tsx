@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { updateTransactionStatus } from "@/actions/admin";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import FormattedDate from "../../components/FormattedDate";
 
 export default async function AdminDepositsPage() {
     const session = await auth();
@@ -43,7 +44,9 @@ export default async function AdminDepositsPage() {
                                         <td className="p-6 font-bold text-emerald-400">
                                             ${Number(tx.amount).toFixed(2)}
                                         </td>
-                                        <td className="p-6 text-gray-500 text-xs">{tx.createdAt.toLocaleDateString()}</td>
+                                        <td className="p-6 text-gray-500 text-xs">
+                                            <FormattedDate date={tx.createdAt} showTime={false} />
+                                        </td>
                                         <td className="p-6">
                                             <div className="flex gap-2">
                                                 <form action={async () => {

@@ -2,6 +2,7 @@ import { getDashboardData } from "@/actions/getDashboardData";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
+import FormattedDate from "../components/FormattedDate";
 
 export const dynamic = "force-dynamic";
 
@@ -151,7 +152,9 @@ export default async function DashboardPage() {
                                                 {tx.status}
                                             </span>
                                         </td>
-                                        <td className="p-6 text-gray-500 text-xs">{new Date(tx.createdAt).toLocaleString()}</td>
+                                        <td className="p-6 text-gray-500 text-xs">
+                                            <FormattedDate date={tx.createdAt} />
+                                        </td>
                                     </tr>
                                 ))
                             )}

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
@@ -11,32 +12,39 @@ async function main() {
 
     const plans = [
         {
-            name: 'STARTER PLAN',
-            roiPercent: 120, // 6% * 20 hours
+            name: 'BEGINNER',
+            roiPercent: 90, // 6% * 15h
+            cycleHours: 15,
+            minDeposit: 50,
+            maxDeposit: 499,
+        },
+        {
+            name: 'BEGINNERS PRO',
+            roiPercent: 160, // 8% * 20h
             cycleHours: 20,
-            minDeposit: 1,
-            maxDeposit: 10000,
+            minDeposit: 500,
+            maxDeposit: 1499,
         },
         {
-            name: 'PREMIUM PLAN',
-            roiPercent: 160, // 4% * 40h
-            cycleHours: 40,
-            minDeposit: 5,
-            maxDeposit: 10000,
+            name: 'PROFESSIONAL',
+            roiPercent: 264, // 11% * 24h
+            cycleHours: 24,
+            minDeposit: 1500,
+            maxDeposit: 14999,
         },
         {
-            name: 'ADVANCED PLAN',
-            roiPercent: 200, // 20% * 10h
-            cycleHours: 10,
-            minDeposit: 450,
-            maxDeposit: 10000,
+            name: 'EXPERT BUSINESS',
+            roiPercent: 936, // 26% * 36h
+            cycleHours: 36,
+            minDeposit: 15000,
+            maxDeposit: 100000000, // Unlimited
         },
         {
-            name: 'VIP PLAN',
-            roiPercent: 200, // 40% * 5h
+            name: 'PROMO',
+            roiPercent: 50, // 10% * 5h
             cycleHours: 5,
-            minDeposit: 400,
-            maxDeposit: 10000,
+            minDeposit: 2500,
+            maxDeposit: 6000,
         }
     ];
 

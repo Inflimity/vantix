@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
+import FormattedDate from "../../components/FormattedDate";
 
 export default async function TransactionsPage() {
     const session = await auth();
@@ -72,7 +73,7 @@ export default async function TransactionsPage() {
                                             </span>
                                         </td>
                                         <td className="p-6 text-gray-500 text-xs">
-                                            {new Date(tx.createdAt).toLocaleString()}
+                                            <FormattedDate date={tx.createdAt} />
                                         </td>
                                     </tr>
                                 ))

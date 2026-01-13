@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
+import FormattedDate from "../../components/FormattedDate";
 
 export const dynamic = "force-dynamic";
 
@@ -90,7 +91,7 @@ export default async function AdminTransactionsPage() {
                                             </span>
                                         </td>
                                         <td className="p-6 text-right text-gray-500 text-xs font-mono">
-                                            {new Date(tx.createdAt).toLocaleString()}
+                                            <FormattedDate date={tx.createdAt} />
                                         </td>
                                     </tr>
                                 ))

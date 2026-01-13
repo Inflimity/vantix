@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,52 +8,57 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(cuid())
-  email          String       @unique
-  password       String
-  fullName       String
-  balance        Decimal      @default(0.0)
-  totalEarned    Decimal      @default(0.0)
-  role           Role         @default(USER)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  investments    Investment[]
-  transactions   Transaction[]
+  id           String        @id @default(cuid())
+  email        String        @unique
+  password     String
+  fullName     String
+  balance      Decimal       @default(0.000000000000000000000000000000)
+  totalEarned  Decimal       @default(0.000000000000000000000000000000)
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  investments  Investment[]
+  transactions Transaction[]
 }
 
 model InvestmentPlan {
-  id             String       @id @default(cuid())
-  name           String
-  roiPercent     Decimal
-  cycleHours     Int
-  minDeposit     Decimal
-  maxDeposit     Decimal
-  investments    Investment[]
+  id          String       @id @default(cuid())
+  name        String
+  roiPercent  Decimal
+  cycleHours  Int
+  minDeposit  Decimal
+  maxDeposit  Decimal
+  investments Investment[]
 }
 
 model Investment {
-  id             String         @id @default(cuid())
-  userId         String
-  user           User           @relation(fields: [userId], references: [id])
-  planId         String
-  plan           InvestmentPlan @relation(fields: [planId], references: [id])
-  amount         Decimal
-  status         InvestmentStatus @default(ACTIVE)
-  startDate      DateTime       @default(now())
-  endDate        DateTime
-  createdAt      DateTime       @default(now())
+  id        String           @id @default(cuid())
+  userId    String
+  planId    String
+  amount    Decimal
+  status    InvestmentStatus @default(ACTIVE)
+  startDate DateTime         @default(now())
+  endDate   DateTime
+  createdAt DateTime         @default(now())
+  plan      InvestmentPlan   @relation(fields: [planId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@index([planId], map: "Investment_planId_fkey")
+  @@index([userId], map: "Investment_userId_fkey")
 }
 
 model Transaction {
-  id             String            @id @default(cuid())
-  userId         String
-  user           User              @relation(fields: [userId], references: [id])
-  type           TransactionType
-  amount         Decimal
-  status         TransactionStatus @default(PENDING)
-  gateway        String?
-  walletAddress  String?
-  createdAt      DateTime          @default(now())
+  id            String            @id @default(cuid())
+  userId        String
+  type          TransactionType
+  amount        Decimal
+  status        TransactionStatus @default(PENDING)
+  gateway       String?
+  walletAddress String?
+  createdAt     DateTime          @default(now())
+  user          User              @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "Transaction_userId_fkey")
 }
 
 enum Role {

@@ -2,7 +2,7 @@
 import { useState, useEffect, useTransition } from "react";
 import { invest } from "@/actions/invest";
 
-type PlanKey = 'starter' | 'professional' | 'enterprise';
+type PlanKey = 'beginner' | 'beginnersPro' | 'professional' | 'expertBusiness' | 'promo';
 
 interface Plan {
     name: string;
@@ -13,13 +13,15 @@ interface Plan {
 }
 
 const plans: Record<PlanKey, Plan> = {
-    starter: { name: 'STARTER', roi: 12, hours: 24, min: 100, max: 999 },
-    professional: { name: 'PROFESSIONAL', roi: 25, hours: 48, min: 1000, max: 4999 },
-    enterprise: { name: 'ENTERPRISE', roi: 50, hours: 72, min: 5000, max: 100000 }
+    beginner: { name: 'BEGINNER', roi: 6, hours: 15, min: 50, max: 499 },
+    beginnersPro: { name: 'BEGINNERS PRO', roi: 8, hours: 20, min: 500, max: 1499 },
+    professional: { name: 'PROFESSIONAL', roi: 11, hours: 24, min: 1500, max: 14999 },
+    expertBusiness: { name: 'EXPERT BUSINESS', roi: 26, hours: 36, min: 15000, max: 100000000 },
+    promo: { name: 'PROMO', roi: 10, hours: 5, min: 2500, max: 6000 }
 };
 
 export default function Calculator() {
-    const [selectedPlan, setSelectedPlan] = useState<PlanKey>('starter');
+    const [selectedPlan, setSelectedPlan] = useState<PlanKey>('beginner');
     const [amount, setAmount] = useState<number>(100);
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
@@ -62,9 +64,11 @@ export default function Calculator() {
                                 onChange={(e) => setSelectedPlan(e.target.value as PlanKey)}
                                 className="w-full bg-[#020617] border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none transition"
                             >
-                                <option value="starer">Starter (12% ROI / 24 hrs)</option>
-                                <option value="professional">Professional (25% ROI / 48 hrs)</option>
-                                <option value="enterprise">Enterprise (50% ROI / 72 hrs)</option>
+                                <option value="beginner">Beginner (6% ROI / 15 hrs)</option>
+                                <option value="beginnersPro">Beginners Pro (8% ROI / 20 hrs)</option>
+                                <option value="professional">Professional (11% ROI / 24 hrs)</option>
+                                <option value="expertBusiness">Expert Business (26% ROI / 36 hrs)</option>
+                                <option value="promo">Promo (10% ROI / 5 hrs)</option>
                             </select>
                         </div>
 

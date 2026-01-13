@@ -12,10 +12,12 @@ import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
+import NotificationPopup from "./components/NotificationPopup";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#020617] text-white selection:bg-blue-500 selection:text-white">
+      <NotificationPopup />
       <Navbar />
       <Hero />
       <Marquee />

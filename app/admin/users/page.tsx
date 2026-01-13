@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { auth } from "@/auth";
+import FormattedDate from "../../components/FormattedDate";
 import { redirect } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
 import Link from "next/link";
@@ -52,7 +53,7 @@ export default async function AdminUsersPage() {
                                         <div className="font-black text-emerald-400 text-lg">{formatCurrency(user.balance)}</div>
                                     </td>
                                     <td className="p-6 text-gray-400 text-xs font-bold">
-                                        {user.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                                        <FormattedDate date={user.createdAt} showTime={false} />
                                     </td>
                                     <td className="p-6 text-right">
                                         <Link
