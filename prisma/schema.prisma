@@ -21,6 +21,15 @@ model User {
   transactions Transaction[]
 }
 
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
 model InvestmentPlan {
   id          String       @id @default(cuid())
   name        String

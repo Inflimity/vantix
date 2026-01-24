@@ -4,6 +4,8 @@ export const publicRoutes = [
     "/signup",
     "/api/auth/callback/google",
     "/api/auth/callback/github",
+    "/reset-password",
+    "/new-password",
 ];
 
 export const authRoutes = [

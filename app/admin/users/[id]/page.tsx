@@ -50,8 +50,7 @@ export default async function EditUserPage({ params }: { params: { id: string } 
                     id: user.id,
                     fullName: user.fullName,
                     email: user.email,
-                    balance: Number(user.balance),
-                    totalEarned: Number(user.totalEarned)
+                    balance: Number(user.balance)
                 }} />
             </div>
         </div>

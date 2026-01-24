@@ -47,11 +47,11 @@ export default async function AdminDashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
                 <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-[24px] p-6 group hover:border-blue-500/30 transition">
                     <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Liquid Balance</p>
-                    <h3 className="text-2xl font-black text-blue-500">{formatCurrency(totalUserBalances._sum.balance || 0)}</h3>
+                    <h3 className="text-2xl font-black text-blue-500">{formatCurrency(Number(totalUserBalances._sum.balance) || 0)}</h3>
                 </div>
                 <div className="bg-[#0F172A] border-2 border-emerald-500/30 rounded-[24px] p-6 group hover:border-emerald-500/50 transition">
                     <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Locked Capital</p>
-                    <h3 className="text-2xl font-black text-emerald-500">{formatCurrency(totalLockedCapital._sum.amount || 0)}</h3>
+                    <h3 className="text-2xl font-black text-emerald-500">{formatCurrency(Number(totalLockedCapital._sum.amount) || 0)}</h3>
                 </div>
                 <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-[24px] p-6 group hover:border-blue-500/30 transition">
                     <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Total Investors</p>
@@ -59,7 +59,7 @@ export default async function AdminDashboard() {
                 </div>
                 <div className="bg-[#0F172A] border-2 border-orange-500/30 rounded-[24px] p-6 group hover:border-orange-500/50 transition">
                     <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Pending Payouts</p>
-                    <h3 className="text-2xl font-black text-orange-500">{formatCurrency(pendingWithdrawals._sum.amount || 0)}</h3>
+                    <h3 className="text-2xl font-black text-orange-500">{formatCurrency(Number(pendingWithdrawals._sum.amount) || 0)}</h3>
                 </div>
             </div>
 

@@ -2,16 +2,13 @@
 
 import Link from "next/link";
 import { useState, useTransition } from "react";
-import { login } from "@/actions/login";
-import { useRouter } from "next/navigation";
+import { reset } from "@/actions/reset";
 
-export default function LoginPage() {
+export default function ResetPage() {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
-    const router = useRouter();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,18 +16,11 @@ export default function LoginPage() {
         setSuccess("");
 
         startTransition(() => {
-            login({ email, password })
+            reset({ email })
                 .then((data) => {
-                    if (data?.error) {
-                        setError(data.error);
-                    }
-                    if (data?.success) {
-                        setSuccess(data.success);
-                        // Optionally redirect here if not handled by middleware/auth
-                        router.push("/dashboard");
-                    }
-                })
-                .catch(() => setError("Something went wrong"));
+                    setError(data?.error);
+                    setSuccess(data?.success);
+                });
         });
     };
 
@@ -42,7 +32,7 @@ export default function LoginPage() {
                 </h1>
                 <div className="inline-block px-3 py-1 bg-blue-900/20 border border-blue-500/30 rounded-full mt-3">
                     <span className="text-[9px] font-bold uppercase tracking-widest text-blue-400">
-                        Secure Protocol Active
+                        Recovery Protocol
                     </span>
                 </div>
             </div>
@@ -54,35 +44,13 @@ export default function LoginPage() {
                             Email Address
                         </label>
                         <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
+                            type="email"
+                            placeholder="your.email@example.com"
                             className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
                             required
                             disabled={isPending}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-
-                    <div>
-                        <div className="flex justify-between mb-1.5 ml-1">
-                            <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
-                                Access Key
-                            </label>
-                            <Link href="/reset-password" className="text-[10px] font-bold text-blue-500 uppercase">
-                                Forgot?
-                            </Link>
-                        </div>
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="••••••••"
-                            className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
-                            required
-                            disabled={isPending}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
 
@@ -103,30 +71,18 @@ export default function LoginPage() {
                         disabled={isPending}
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 rounded-xl uppercase text-xs tracking-widest transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20 disabled:opacity-50"
                     >
-                        {isPending ? "Connecting..." : "Log In"}
+                        {isPending ? "Sending Verification..." : "Send Reset Link"}
                     </button>
                 </form>
 
                 <div className="mt-6 pt-6 border-t border-gray-800 text-center">
-                    <p className="text-gray-500 text-xs">
-                        New Partner?{" "}
-                        <Link
-                            href="/signup"
-                            className="text-white font-bold hover:text-blue-500"
-                        >
-                            Register
-                        </Link>
-                    </p>
+                    <Link
+                        href="/login"
+                        className="text-[10px] font-bold text-gray-600 uppercase tracking-widest hover:text-gray-400 transition"
+                    >
+                        ← Back to Login
+                    </Link>
                 </div>
-            </div>
-
-            <div className="mt-8">
-                <Link
-                    href="/"
-                    className="text-[10px] font-bold text-gray-600 uppercase tracking-widest hover:text-gray-400 transition"
-                >
-                    ← Back to Homepage
-                </Link>
             </div>
         </div>
     );

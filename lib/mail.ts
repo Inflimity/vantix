@@ -5,16 +5,16 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 export const sendWelcomeEmail = async (email: string, fullName: string) => {
-    if (!process.env.RESEND_API_KEY) {
-        console.warn("RESEND_API_KEY is missing. Skipping email sending.");
-        return;
-    }
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY is missing. Skipping email sending.");
+    return;
+  }
 
-    await resend.emails.send({
-        from: "Vantix Support <onboarding@resend.dev>", // Note: Use 'onboarding@resend.dev' for testing without a domain
-        to: email,
-        subject: "Welcome to Vantix Protocol 🚀",
-        html: `
+  await resend.emails.send({
+    from: "Vantix Support <onboarding@resend.dev>", // Note: Use 'onboarding@resend.dev' for testing without a domain
+    to: email,
+    subject: "Welcome to Vantix Protocol 🚀",
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
         <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px;">Vantix.</h1>
         
@@ -45,17 +45,17 @@ export const sendWelcomeEmail = async (email: string, fullName: string) => {
         </p>
       </div>
     `
-    });
+  });
 };
 
 export const sendDepositApprovedEmail = async (email: string, fullName: string, amount: string, currency: string) => {
-    if (!process.env.RESEND_API_KEY) return;
+  if (!process.env.RESEND_API_KEY) return;
 
-    await resend.emails.send({
-        from: "Vantix Support <payments@resend.dev>",
-        to: email,
-        subject: "Deposit Approved 💰",
-        html: `
+  await resend.emails.send({
+    from: "Vantix Support <payments@resend.dev>",
+    to: email,
+    subject: "Deposit Approved 💰",
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
         <h1 style="color: #10b981; text-transform: uppercase; letter-spacing: 2px;">Payment Received</h1>
         
@@ -74,17 +74,17 @@ export const sendDepositApprovedEmail = async (email: string, fullName: string, 
         </a>
       </div>
     `
-    });
+  });
 };
 
 export const sendWithdrawalApprovedEmail = async (email: string, fullName: string, amount: string, currency: string) => {
-    if (!process.env.RESEND_API_KEY) return;
+  if (!process.env.RESEND_API_KEY) return;
 
-    await resend.emails.send({
-        from: "Vantix Support <payments@resend.dev>",
-        to: email,
-        subject: "Withdrawal Sent 💸",
-        html: `
+  await resend.emails.send({
+    from: "Vantix Support <payments@resend.dev>",
+    to: email,
+    subject: "Withdrawal Sent 💸",
+    html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
         <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px;">Funds On The Way</h1>
         
@@ -99,17 +99,17 @@ export const sendWithdrawalApprovedEmail = async (email: string, fullName: strin
         </p>
       </div>
     `
-    });
+  });
 };
 
 export const sendInvestmentEmail = async (email: string, fullName: string, planName: string, amount: string) => {
-    if (!process.env.RESEND_API_KEY) return;
+  if (!process.env.RESEND_API_KEY) return;
 
-    await resend.emails.send({
-        from: "Vantix Support <invest@resend.dev>",
-        to: email,
-        subject: "Investment Protocol Activated 🚀",
-        html: `
+  await resend.emails.send({
+    from: "Vantix Support <invest@resend.dev>",
+    to: email,
+    subject: "Investment Protocol Activated 🚀",
+    html: `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
       <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px;">Protocol Activated</h1>
       
@@ -139,6 +139,48 @@ export const sendInvestmentEmail = async (email: string, fullName: string, planN
       </a>
     </div>
   `
-    });
+  });
 };
 
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  const resetLink = `${domain}/new-password?token=${token}`;
+
+  console.log("Attempting to send reset email to:", email);
+  if (!process.env.RESEND_API_KEY) {
+    console.error("❌ RESEND_API_KEY is missing in environment variables!");
+    return;
+  }
+
+  try {
+    const data = await resend.emails.send({
+      from: "Vantix Support <security@resend.dev>",
+      to: email,
+      subject: "Reset your VANTIX password",
+      html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
+                <div style="background-color: #020617; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+                    <h1 style="color: #ffffff; margin: 0; font-family: 'Arial Black', sans-serif; letter-spacing: -2px;">VANTIX<span style="color: #2563eb;">.</span></h1>
+                </div>
+                <div style="background-color: #ffffff; padding: 40px; border-radius: 0 0 10px 10px;">
+                    <h2 style="color: #1a1a1a; margin-top: 0;">Reset Password Request</h2>
+                    <p style="color: #555555; line-height: 1.6;">We received a request to reset your password for the VANTIX Secure Protocol.</p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="${resetLink}" style="background-color: #2563eb; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">Secure Reset Link</a>
+                    </div>
+                    <p style="color: #555555; font-size: 13px;">Or copy and paste this link into your browser:</p>
+                    <p style="background-color: #f0f2f5; padding: 10px; border-radius: 4px; word-break: break-all; font-size: 12px; color: #555;">${resetLink}</p>
+                    <p style="color: #999999; font-size: 12px; margin-top: 30px;">If you did not request this change, please ignore this email. This link will expire in 1 hour.</p>
+                </div>
+                <div style="text-align: center; padding: 20px; color: #999999; font-size: 11px;">
+                    &copy; ${new Date().getFullYear()} Vantix Protocol. All System Rights Reserved.
+                </div>
+            </div>
+        `
+    });
+    console.log("✅ Email sent successfully:", data);
+    return data;
+  } catch (error) {
+    console.error("❌ Error sending email:", error);
+    throw error;
+  }
+};
