@@ -18,6 +18,12 @@ const globalRateLimit = new Ratelimit({
     analytics: true,
 });
 
+const authRateLimit = new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.slidingWindow(5, "1 m"),
+    analytics: true,
+});
+
 const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
@@ -27,6 +33,21 @@ export default auth(async (req) => {
     // Rate limiting check
     try {
         if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+            const isAuthReq = authRoutes.includes(nextUrl.pathname) || nextUrl.pathname.startsWith(apiAuthPrefix);
+            if (isAuthReq) {
+                const { success: authSuccess, limit: authLimit, reset: authReset, remaining: authRemaining } = await authRateLimit.limit(`auth_${ip}`);
+                if (!authSuccess) {
+                    return new NextResponse("Too Many Authentication Attempts", {
+                        status: 429,
+                        headers: {
+                            "X-RateLimit-Limit": authLimit.toString(),
+                            "X-RateLimit-Remaining": authRemaining.toString(),
+                            "X-RateLimit-Reset": authReset.toString(),
+                        },
+                    });
+                }
+            }
+
             const { success, limit, reset, remaining } = await globalRateLimit.limit(`global_${ip}`);
             if (!success) {
                 return new NextResponse("Too Many Requests", {
