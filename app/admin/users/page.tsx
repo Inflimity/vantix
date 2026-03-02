@@ -13,7 +13,15 @@ export default async function AdminUsersPage() {
     }
 
     const users = await db.user.findMany({
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        select: {
+            id: true,
+            email: true,
+            fullName: true,
+            balance: true,
+            role: true,
+            createdAt: true,
+        }
     });
 
     return (

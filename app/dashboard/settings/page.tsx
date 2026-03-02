@@ -12,6 +12,7 @@ export default async function SettingsPage() {
 
     const user = await db.user.findUnique({
         where: { email: session.user.email },
+        select: { id: true, email: true, fullName: true },
     });
 
     if (!user) {

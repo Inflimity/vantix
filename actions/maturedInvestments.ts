@@ -1,12 +1,19 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { auth } from "@/auth";
 
 /**
  * Checks and processes any ACTIVE investments that have reached their endDate.
  * Returns Capital + Profit to the user's balance.
+ * SECURITY: Validates the caller is authenticated and is processing their own investments.
  */
 export const processMaturedInvestments = async (userId: string) => {
+    const session = await auth();
+    if (!session?.user?.id || session.user.id !== userId) {
+        console.error("Unauthorized attempt to process matured investments");
+        return;
+    }
     try {
         // Find ACTIVE investments for this user that have ended
         const maturedInvestments = await db.investment.findMany({

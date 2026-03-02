@@ -25,13 +25,12 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
     });
 
     if (!existingUser) {
-        return { error: "Email not found!" };
+        // SECURITY: Return same success message to prevent user enumeration
+        return { success: "If that email exists, a reset link has been sent." };
     }
 
     const passwordResetToken = await generatePasswordResetToken(email);
-    console.log("Token generated for:", email);
     await sendPasswordResetEmail(passwordResetToken.email, passwordResetToken.token);
-    console.log("Email send function called");
 
-    return { success: "Reset email sent!" };
+    return { success: "If that email exists, a reset link has been sent." };
 }

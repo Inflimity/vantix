@@ -25,7 +25,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     });
 
     if (!existingUser || !existingUser.email || !existingUser.password) {
-        return { error: "Email does not exist!" };
+        return { error: "Invalid credentials!" };
     }
 
     // Default redirect

@@ -10,7 +10,7 @@ export default async function AdminDepositsPage() {
 
     const pendingDeposits = await db.transaction.findMany({
         where: { type: "DEPOSIT", status: "PENDING" },
-        include: { user: true },
+        include: { user: { select: { id: true, fullName: true, email: true } } },
         orderBy: { createdAt: "desc" }
     });
 

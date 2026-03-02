@@ -22,10 +22,18 @@ export const getDashboardData = async () => {
     // 2. Process matured investments BEFORE fetching data
     await processMaturedInvestments(basicUser.id);
 
-    // 3. Fetch full data
+    // 3. Fetch full data (SECURITY: explicitly exclude password hash)
     const user = await db.user.findUnique({
         where: { id: basicUser.id },
-        include: {
+        select: {
+            id: true,
+            email: true,
+            fullName: true,
+            balance: true,
+            totalEarned: true,
+            role: true,
+            createdAt: true,
+            updatedAt: true,
             investments: {
                 include: { plan: true }
             },

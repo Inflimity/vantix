@@ -14,7 +14,14 @@ export default async function EditUserPage({ params }: { params: { id: string } 
     const { id } = await params;
 
     const user = await db.user.findUnique({
-        where: { id }
+        where: { id },
+        select: {
+            id: true,
+            email: true,
+            fullName: true,
+            balance: true,
+            role: true,
+        }
     });
 
     if (!user) {

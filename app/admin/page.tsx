@@ -35,7 +35,7 @@ export default async function AdminDashboard() {
 
     const pendingRequests = await db.transaction.findMany({
         where: { status: "PENDING" },
-        include: { user: true },
+        include: { user: { select: { id: true, fullName: true, email: true } } },
         orderBy: { createdAt: 'desc' },
         take: 10
     });

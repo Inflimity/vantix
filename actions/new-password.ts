@@ -7,9 +7,12 @@ import { getPasswordResetTokenByToken } from "@/lib/tokens";
 // import { getUserByEmail } from "@/data/user";
 
 const NewPasswordSchema = z.object({
-    password: z.string().min(6, {
-        message: "Minimum 6 characters required",
-    }),
+    password: z.string()
+        .min(8, { message: "Minimum 8 characters required" })
+        .regex(/[A-Z]/, { message: "Must contain at least one uppercase letter" })
+        .regex(/[a-z]/, { message: "Must contain at least one lowercase letter" })
+        .regex(/[0-9]/, { message: "Must contain at least one number" })
+        .regex(/[^A-Za-z0-9]/, { message: "Must contain at least one special character" }),
 });
 
 export const newPassword = async (
