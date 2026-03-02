@@ -3,8 +3,19 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const InvestSchema = z.object({
+    planId: z.string().min(1),
+    amount: z.number().positive({ message: "Amount must be positive" }),
+});
 
 export const invest = async (planId: string, amount: number) => {
+    const validatedFields = InvestSchema.safeParse({ planId, amount });
+    if (!validatedFields.success) {
+        return { error: "Invalid input" };
+    }
+
     const session = await auth();
     if (!session?.user?.id) {
         return { error: "You must be logged in to invest" };

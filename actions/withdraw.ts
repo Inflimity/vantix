@@ -3,13 +3,22 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const WithdrawSchema = z.object({
+    amount: z.number().positive({ message: "Amount must be positive" }),
+    walletAddress: z.string().min(1, { message: "Wallet address is required" }),
+    walletType: z.string().default("Crypto"),
+});
 
 export const requestWithdrawal = async (amount: number, walletAddress: string, walletType: string = "Crypto") => {
+    const validatedFields = WithdrawSchema.safeParse({ amount, walletAddress, walletType });
+    if (!validatedFields.success) {
+        return { error: "Invalid input" };
+    }
+
     const session = await auth();
     if (!session?.user?.id) return { error: "Not authorized" };
-
-    if (amount <= 0) return { error: "Invalid amount" };
-    if (!walletAddress) return { error: "Wallet address is required" };
 
     try {
         const user = await db.user.findUnique({
