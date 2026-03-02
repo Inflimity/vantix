@@ -81,30 +81,25 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
             }
         }
 
-        // If APPROVED and WITHDRAWAL -> Send Email
-        if (status === "APPROVED" && transaction.type === "WITHDRAWAL") {
-            // Logic for deduction usually happens at request time, but if it happens here:
-            // await db.user.update({ ... balance: { decrement: ... } }) -- assuming we didn't deduct yet.
-            // For now, let's assume we deducted "Available Balance" on request or we deduct now.
-            // Let's deduct now for safety if we haven't implemented request logic yet.
-
-            const user = await db.user.findUnique({ where: { id: transaction.userId } });
-            if (user) {
+        // If WITHDRAWAL
+        if (transaction.type === "WITHDRAWAL") {
+            if (status === "APPROVED") {
+                try {
+                    await sendWithdrawalApprovedEmail(
+                        transaction.user.email,
+                        transaction.user.fullName,
+                        transaction.amount.toString(),
+                        "USD"
+                    );
+                } catch (err) {
+                    console.error("Failed to send withdrawal email:", err);
+                }
+            } else if (status === "REJECTED") {
+                // Refund the user balance
                 await db.user.update({
-                    where: { id: user.id },
-                    data: { balance: { decrement: transaction.amount } }
+                    where: { id: transaction.userId },
+                    data: { balance: { increment: transaction.amount } }
                 });
-            }
-
-            try {
-                await sendWithdrawalApprovedEmail(
-                    transaction.user.email,
-                    transaction.user.fullName,
-                    transaction.amount.toString(),
-                    "USD"
-                );
-            } catch (err) {
-                console.error("Failed to send withdrawal email:", err);
             }
         }
 
