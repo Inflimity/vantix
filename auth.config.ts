@@ -21,17 +21,25 @@ export default {
                 const validatedFields = LoginSchema.safeParse(credentials);
                 if (validatedFields.success) {
                     const { email, password } = validatedFields.data;
-
-                    // We need to fetch user from DB. 
-                    // Note: In NextAuth v5 beta, this code runs on server, so we can use Prisma IF we are not in Edge runtime.
-                    // However, auth.config.ts is often used in Middleware (Edge).
-                    // For simplicity, we will assume standard Node runtime for now or implement a workaround if Edge is enforced.
-                    // Since we are using standard `next-auth`, we put the heavy lifting in `auth.ts`.
-
                     return null; // This is just the config shape, logic is in auth.ts
                 }
                 return null;
             }
         })
     ],
+    callbacks: {
+        async session({ token, session }) {
+            if (token.sub && session.user) {
+                session.user.id = token.sub;
+            }
+            if (token.role && session.user) {
+                // @ts-expect-error - Role is not in default Session type
+                session.user.role = token.role;
+            }
+            return session;
+        },
+        async jwt({ token }) {
+            return token;
+        }
+    },
 } satisfies NextAuthConfig
