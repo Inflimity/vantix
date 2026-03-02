@@ -4,8 +4,20 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { sendDepositApprovedEmail, sendWithdrawalApprovedEmail } from "@/lib/mail";
 import { auth } from "@/auth";
+import { z } from "zod";
+
+const UpdateUserSchema = z.object({
+    fullName: z.string().min(1).optional(),
+    email: z.string().email().optional(),
+    balance: z.number().optional(),
+});
 
 export const updateUser = async (userId: string, data: { fullName?: string, email?: string, balance?: number }) => {
+    const validatedFields = UpdateUserSchema.safeParse(data);
+    if (!validatedFields.success || !userId) {
+        return { error: "Invalid input fields" };
+    }
+
     const session = await auth();
     // @ts-expect-error - role on user
     if (session?.user?.role !== "ADMIN") {
@@ -31,7 +43,17 @@ export const updateUser = async (userId: string, data: { fullName?: string, emai
     }
 };
 
+const UpdateTransactionSchema = z.object({
+    transactionId: z.string().min(1),
+    status: z.enum(["APPROVED", "REJECTED"]),
+});
+
 export const updateTransactionStatus = async (transactionId: string, status: "APPROVED" | "REJECTED") => {
+    const validatedFields = UpdateTransactionSchema.safeParse({ transactionId, status });
+    if (!validatedFields.success) {
+        return { error: "Invalid input fields" };
+    }
+
     const session = await auth();
     // @ts-expect-error - role on user
     if (session?.user?.role !== "ADMIN") {
