@@ -4,19 +4,31 @@ import { useState, useTransition } from "react";
 import { createDeposit } from "@/actions/deposit";
 import { useRouter } from "next/navigation";
 
-const WALLETS = {
-    BTC: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
-    ETH: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
-    USDT: "TJ9rT8h7s6d5f4g3h2j1k0l9m8n7b6v5c4x3z2"
-};
+interface DepositFormProps {
+    wallets: Record<string, string>;
+}
 
-export default function DepositForm() {
+export default function DepositForm({ wallets }: DepositFormProps) {
+    const currencies = Object.keys(wallets);
     const [amount, setAmount] = useState("");
-    const [gateway, setGateway] = useState<"BTC" | "ETH" | "USDT">("BTC");
+    const [gateway, setGateway] = useState(currencies[0] || "");
     const [step, setStep] = useState<1 | 2>(1);
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState("");
     const router = useRouter();
+
+    if (currencies.length === 0) {
+        return (
+            <div className="animate-fade-in-up max-w-2xl mx-auto">
+                <h1 className="text-3xl font-black mb-2">Fund Your Account</h1>
+                <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-[30px] p-12 text-center mt-6">
+                    <div className="text-4xl mb-4 opacity-30">💳</div>
+                    <p className="text-gray-400 font-bold">Deposit wallets are not configured yet.</p>
+                    <p className="text-gray-500 text-sm mt-2">Please contact support for assistance.</p>
+                </div>
+            </div>
+        );
+    }
 
     const handleCreateDeposit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,6 +52,8 @@ export default function DepositForm() {
         });
     };
 
+    const currentAddress = wallets[gateway] || "";
+
     return (
         <div className="animate-fade-in-up max-w-2xl mx-auto">
             <h1 className="text-3xl font-black mb-2">Fund Your Account</h1>
@@ -51,7 +65,7 @@ export default function DepositForm() {
                         <div>
                             <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">Select Asset</label>
                             <div className="grid grid-cols-3 gap-3">
-                                {(['BTC', 'ETH', 'USDT'] as const).map((coin) => (
+                                {currencies.map((coin) => (
                                     <button
                                         key={coin}
                                         type="button"
@@ -94,9 +108,9 @@ export default function DepositForm() {
                         </div>
 
                         <div className="bg-[#020617] p-6 rounded-2xl border border-[#1E293B] flex flex-col items-center">
-                            {/* Placeholder QR Code - In production use a library */}
+                            {/* QR Code */}
                             <div className="w-48 h-48 bg-white mb-6 p-2 rounded-xl">
-                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${WALLETS[gateway]}`} alt="QR Code" className="w-full h-full" />
+                                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${currentAddress}`} alt="QR Code" className="w-full h-full" />
                             </div>
 
                             <div className="w-full">
@@ -104,11 +118,11 @@ export default function DepositForm() {
                                 <div className="flex bg-[#1E293B] rounded-xl overflow-hidden p-1">
                                     <input
                                         readOnly
-                                        value={WALLETS[gateway]}
+                                        value={currentAddress}
                                         className="bg-transparent flex-1 px-3 text-xs text-gray-300 font-mono outline-none"
                                     />
                                     <button
-                                        onClick={() => navigator.clipboard.writeText(WALLETS[gateway])}
+                                        onClick={() => navigator.clipboard.writeText(currentAddress)}
                                         className="bg-blue-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-blue-700 transition"
                                     >
                                         COPY

@@ -91,3 +91,11 @@ enum TransactionStatus {
   APPROVED
   REJECTED
 }
+
+model WalletAddress {
+  id        String   @id @default(cuid())
+  currency  String   @unique
+  address   String
+  label     String?
+  updatedAt DateTime @updatedAt
+}
