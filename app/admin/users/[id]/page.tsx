@@ -6,7 +6,6 @@ import UserEditForm from "./UserEditForm";
 
 export default async function EditUserPage({ params }: { params: { id: string } }) {
     const session = await auth();
-    // @ts-expect-error - role on user
     if (session?.user?.role !== "ADMIN") {
         return redirect("/");
     }

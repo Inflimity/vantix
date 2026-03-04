@@ -8,7 +8,6 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminTransactionsPage() {
     const session = await auth();
-    // @ts-expect-error - role is on user
     if (session?.user?.role !== "ADMIN") {
         return redirect("/");
     }

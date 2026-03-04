@@ -47,8 +47,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     // For critical emails like "Verify Email", we should await. For "Welcome", it's fine to fire and forget or await safely.
     try {
         await sendWelcomeEmail(email, fullName);
-    } catch (error) {
-        console.error("Failed to send welcome email:", error);
+    } catch {
+        // Welcome email is non-critical; silently continue
     }
 
     return { success: "User created!" };

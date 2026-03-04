@@ -19,7 +19,6 @@ export const updateUser = async (userId: string, data: { fullName?: string, emai
     }
 
     const session = await auth();
-    // @ts-expect-error - role on user
     if (session?.user?.role !== "ADMIN") {
         return { error: "Not authorized" };
     }
@@ -37,8 +36,7 @@ export const updateUser = async (userId: string, data: { fullName?: string, emai
         revalidatePath(`/admin/users/${userId}`);
 
         return { success: "User updated successfully" };
-    } catch (error) {
-        console.error("Update User Error:", error);
+    } catch {
         return { error: "Failed to update user" };
     }
 };
@@ -55,7 +53,6 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
     }
 
     const session = await auth();
-    // @ts-expect-error - role on user
     if (session?.user?.role !== "ADMIN") {
         return { error: "Not authorized" };
     }
@@ -98,8 +95,8 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
                     transaction.amount.toString(),
                     "USD"
                 );
-            } catch (err) {
-                console.error("Failed to send deposit email:", err);
+            } catch {
+                // Email sending is best-effort
             }
         }
 
@@ -113,8 +110,8 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
                         transaction.amount.toString(),
                         "USD"
                     );
-                } catch (err) {
-                    console.error("Failed to send withdrawal email:", err);
+                } catch {
+                    // Email sending is best-effort
                 }
             } else if (status === "REJECTED") {
                 // Refund the user balance
@@ -130,8 +127,7 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
         revalidatePath("/dashboard");
 
         return { success: `Transaction ${status}` };
-    } catch (error) {
-        console.error("Admin Action Error:", error);
+    } catch {
         return { error: "Failed to update transaction" };
     }
 };

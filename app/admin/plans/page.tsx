@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 export default async function AdminPlansPage() {
     const session = await auth();
-    // @ts-expect-error - role on user
     if (session?.user?.role !== "ADMIN") {
         return redirect("/");
     }

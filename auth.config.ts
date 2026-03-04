@@ -33,8 +33,7 @@ export default {
                 session.user.id = token.sub;
             }
             if (token.role && session.user) {
-                // @ts-expect-error - Role is not in default Session type
-                session.user.role = token.role;
+                session.user.role = token.role as "USER" | "ADMIN";
             }
             return session;
         },

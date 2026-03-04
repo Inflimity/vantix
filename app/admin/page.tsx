@@ -6,7 +6,6 @@ import { updateTransactionStatus } from "@/actions/admin";
 
 export default async function AdminDashboard() {
     const session = await auth();
-    // @ts-expect-error - role is on user
     if (session?.user?.role !== "ADMIN") {
         return redirect("/");
     }

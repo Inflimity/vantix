@@ -16,8 +16,8 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Bitfoniz Crypto | Premium Rebrand",
-  description: "Maximize your Wealth. Earn 40% in profit.",
+  title: "Bitfoniz — Secure Crypto Investment Platform",
+  description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
 };
 
 export default function RootLayout({

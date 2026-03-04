@@ -6,7 +6,7 @@ import FormattedDate from "../../components/FormattedDate";
 
 export default async function AdminDepositsPage() {
     const session = await auth();
-    if ((session?.user as any)?.role !== "ADMIN") return redirect("/");
+    if (session?.user?.role !== "ADMIN") return redirect("/");
 
     const pendingDeposits = await db.transaction.findMany({
         where: { type: "DEPOSIT", status: "PENDING" },

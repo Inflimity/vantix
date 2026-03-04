@@ -76,8 +76,7 @@ export const invest = async (planId: string, amount: number) => {
         revalidatePath("/dashboard/investments");
 
         return { success: `Successfully invested $${amount} in ${plan.name}!` };
-    } catch (error) {
-        console.error("Investment Error:", error);
+    } catch {
         return { error: "Failed to process investment" };
     }
 };

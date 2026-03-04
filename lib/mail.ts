@@ -4,6 +4,16 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
+/** Sanitize user input before injecting into HTML email templates */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export const sendWelcomeEmail = async (email: string, fullName: string) => {
   if (!process.env.RESEND_API_KEY) {
     console.warn("RESEND_API_KEY is missing. Skipping email sending.");
@@ -18,7 +28,7 @@ export const sendWelcomeEmail = async (email: string, fullName: string) => {
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
         <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px;">Bitfoniz.</h1>
         
-        <h2 style="font-size: 24px; margin-top: 30px;">Welcome aboard, ${fullName}!</h2>
+        <h2 style="font-size: 24px; margin-top: 30px;">Welcome aboard, ${escapeHtml(fullName)}!</h2>
         
         <p style="color: #94a3b8; line-height: 1.6;">
           We are thrilled to enable your access to the Bitfoniz Decentralized Protocol. Your account has been successfully provisioned.
@@ -59,10 +69,10 @@ export const sendDepositApprovedEmail = async (email: string, fullName: string, 
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
         <h1 style="color: #10b981; text-transform: uppercase; letter-spacing: 2px;">Payment Received</h1>
         
-        <p>Hello ${fullName},</p>
+        <p>Hello ${escapeHtml(fullName)},</p>
         
         <p style="font-size: 18px;">
-          Your deposit of <strong style="color: #10b981;">${amount} ${currency}</strong> has been successfully confirmed and added to your balance.
+          Your deposit of <strong style="color: #10b981;">${escapeHtml(amount)} ${escapeHtml(currency)}</strong> has been successfully confirmed and added to your balance.
         </p>
 
         <p style="color: #94a3b8;">
@@ -88,10 +98,10 @@ export const sendWithdrawalApprovedEmail = async (email: string, fullName: strin
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
         <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px;">Funds On The Way</h1>
         
-        <p>Hello ${fullName},</p>
+        <p>Hello ${escapeHtml(fullName)},</p>
         
         <p style="font-size: 18px;">
-          Your withdrawal request for <strong>${amount} ${currency}</strong> has been processed.
+          Your withdrawal request for <strong>${escapeHtml(amount)} ${escapeHtml(currency)}</strong> has been processed.
         </p>
 
         <p style="color: #94a3b8;">
@@ -113,16 +123,16 @@ export const sendInvestmentEmail = async (email: string, fullName: string, planN
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
       <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px;">Protocol Activated</h1>
       
-      <p>Hello ${fullName},</p>
+      <p>Hello ${escapeHtml(fullName)},</p>
       
       <p style="font-size: 18px;">
-        Your investment into the <strong style="color: #3b82f6;">${planName} Strategy</strong> has been successfully deployed.
+        Your investment into the <strong style="color: #3b82f6;">${escapeHtml(planName)} Strategy</strong> has been successfully deployed.
       </p>
 
       <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
         <div style="display: flex; justify-between; margin-bottom: 10px;">
           <span style="color: #94a3b8;">Principal:</span>
-          <span style="color: #ffffff; font-weight: bold; margin-left: auto;">$${amount}</span>
+          <span style="color: #ffffff; font-weight: bold; margin-left: auto;">$${escapeHtml(amount)}</span>
         </div>
         <div style="display: flex; justify-between;">
           <span style="color: #94a3b8;">Status:</span>
@@ -145,9 +155,7 @@ export const sendInvestmentEmail = async (email: string, fullName: string, planN
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetLink = `${domain}/new-password?token=${token}`;
 
-  console.log("Attempting to send reset email to:", email);
   if (!process.env.RESEND_API_KEY) {
-    console.error("❌ RESEND_API_KEY is missing in environment variables!");
     return;
   }
 
@@ -177,10 +185,8 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
             </div>
         `
     });
-    console.log("✅ Email sent successfully:", data);
     return data;
   } catch (error) {
-    console.error("❌ Error sending email:", error);
     throw error;
   }
 };

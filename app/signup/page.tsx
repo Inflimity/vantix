@@ -189,7 +189,7 @@ export default function SignupPage() {
                     </form>
 
                     <div className="mt-6 pt-6 border-t border-gray-800 text-center">
-                        <a href="/login" className="text-xs text-gray-500">Already a Partner? <span className="text-blue-500 font-bold hover:text-white transition">Login</span></a>
+                        <Link href="/login" className="text-xs text-gray-500">Already a Partner? <span className="text-blue-500 font-bold hover:text-white transition">Login</span></Link>
                     </div>
                 </div>
 

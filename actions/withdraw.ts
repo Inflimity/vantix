@@ -50,8 +50,7 @@ export const requestWithdrawal = async (amount: number, walletAddress: string, w
         revalidatePath("/dashboard");
         revalidatePath("/dashboard/withdraw");
         return { success: "Withdrawal request submitted for approval" };
-    } catch (error) {
-        console.error("Withdrawal Error:", error);
+    } catch {
         return { error: "Failed to process withdrawal request" };
     }
 };

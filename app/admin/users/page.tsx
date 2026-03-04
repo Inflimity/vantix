@@ -7,7 +7,6 @@ import Link from "next/link";
 
 export default async function AdminUsersPage() {
     const session = await auth();
-    // @ts-expect-error - role is on user
     if (session?.user?.role !== "ADMIN") {
         return redirect("/");
     }

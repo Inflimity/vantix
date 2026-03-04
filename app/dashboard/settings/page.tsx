@@ -2,6 +2,7 @@
 import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default async function SettingsPage() {
     const session = await auth();
@@ -50,7 +51,7 @@ export default async function SettingsPage() {
 
                 <div className="pt-8 border-t border-[#1E293B]">
                     <h3 className="text-xl font-bold mb-4">Security</h3>
-                    <button className="bg-[#1E293B] hover:bg-[#28354c] text-white px-6 py-3 rounded-xl font-bold text-sm transition">Change Password</button>
+                    <Link href="/reset-password" className="inline-block bg-[#1E293B] hover:bg-[#28354c] text-white px-6 py-3 rounded-xl font-bold text-sm transition">Change Password</Link>
                 </div>
             </div>
         </div>

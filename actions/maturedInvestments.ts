@@ -11,7 +11,6 @@ import { auth } from "@/auth";
 export const processMaturedInvestments = async (userId: string) => {
     const session = await auth();
     if (!session?.user?.id || session.user.id !== userId) {
-        console.error("Unauthorized attempt to process matured investments");
         return;
     }
     try {
@@ -29,7 +28,7 @@ export const processMaturedInvestments = async (userId: string) => {
 
         if (maturedInvestments.length === 0) return;
 
-        console.log(`Processing ${maturedInvestments.length} matured investments for user ${userId}`);
+
 
         for (const investment of maturedInvestments) {
             const capital = Number(investment.amount);
@@ -65,7 +64,7 @@ export const processMaturedInvestments = async (userId: string) => {
                 })
             ]);
         }
-    } catch (error) {
-        console.error("Error processing matured investments:", error);
+    } catch {
+        // Silently handle - matured investment processing failures are non-critical
     }
 };

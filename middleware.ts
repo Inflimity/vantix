@@ -60,11 +60,10 @@ export default auth(async (req) => {
                 });
             }
         }
-    } catch (error) {
-        console.error("Rate limit error:", error);
+    } catch {
+        // Rate limiting failure is non-critical — allow the request through
     }
     const isLoggedIn = !!req.auth;
-    // @ts-expect-error - role is mapped in auth.ts
     const userRole = req.auth?.user?.role;
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
