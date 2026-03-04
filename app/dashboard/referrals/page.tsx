@@ -4,7 +4,7 @@ export default function ReferralsPage() {
     return (
         <div className="animate-fade-in-up">
             <h1 className="text-3xl font-black mb-2">Referral Program</h1>
-            <p className="text-gray-500 mb-8">Earn rewards by inviting friends to Vantix.</p>
+            <p className="text-gray-500 mb-8">Earn rewards by inviting friends to Bitfoniz.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                 <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-[30px] p-8">
@@ -13,7 +13,7 @@ export default function ReferralsPage() {
                         <input
                             type="text"
                             readOnly
-                            value="https://vantix.com/ref/u12345"
+                            value="https://bitfoniz.com/ref/u12345"
                             className="w-full bg-[#020617] border border-[#1E293B] rounded-xl px-4 py-2 text-sm text-gray-400"
                         />
                         <button className="bg-blue-600 px-4 py-2 rounded-xl text-white font-bold text-xs uppercase">Copy</button>

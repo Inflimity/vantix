@@ -17,7 +17,7 @@ async function main() {
         const data = await resend.emails.send({
             from: 'onboarding@resend.dev',
             to: process.argv[2] || 'test@example.com', // User passes email as arg
-            subject: 'Test Email from Vantix Debugger',
+            subject: 'Test Email from Bitfoniz Debugger',
             html: '<p>If you see this, your API Key works!</p>'
         });
 

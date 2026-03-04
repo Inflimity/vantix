@@ -32,7 +32,7 @@ function NewPasswordForm() {
         <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#020617] text-white font-jakarta">
             <div className="w-full max-w-[360px] text-center mb-8">
                 <h1 className="text-3xl font-black tracking-tighter uppercase">
-                    VANTIX<span className="text-blue-600">.</span>
+                    BITFONIZ<span className="text-blue-600">.</span>
                 </h1>
                 <div className="inline-block px-3 py-1 bg-blue-900/20 border border-blue-500/30 rounded-full mt-3">
                     <span className="text-[9px] font-bold uppercase tracking-widest text-blue-400">

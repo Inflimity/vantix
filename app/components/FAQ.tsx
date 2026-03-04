@@ -10,8 +10,8 @@ export default function FAQ() {
 
     const faqs = [
         {
-            question: "What exactly is Vantix INC LTD?",
-            answer: "Vantix INC LTD is a legally registered UK investment company. We utilize professional traders and high-frequency algorithms in Forex, Crypto Exchange, and Mining to generate consistent hourly profits for our members."
+            question: "What exactly is Bitfoniz INC LTD?",
+            answer: "Bitfoniz INC LTD is a legally registered UK investment company. We utilize professional traders and high-frequency algorithms in Forex, Crypto Exchange, and Mining to generate consistent hourly profits for our members."
         },
         {
             question: "How do I open an account?",
@@ -55,7 +55,7 @@ export default function FAQ() {
         <section id="faq" className="py-20 max-w-7xl mx-auto px-6">
             <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-5xl font-black mb-4 text-white">Frequently Asked <span className="serif italic text-blue-500">Questions</span></h2>
-                <p className="text-gray-400">Everything you need to know about investing with Vantix INC LTD.</p>
+                <p className="text-gray-400">Everything you need to know about investing with Bitfoniz INC LTD.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

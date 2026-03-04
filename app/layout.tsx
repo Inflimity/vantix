@@ -16,7 +16,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Vantix Crypto | Premium Rebrand",
+  title: "Bitfoniz Crypto | Premium Rebrand",
   description: "Maximize your Wealth. Earn 40% in profit.",
 };
 

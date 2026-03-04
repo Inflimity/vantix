@@ -58,7 +58,7 @@ export default function SignupPage() {
             <div className="w-full max-w-[420px]">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-black tracking-tighter uppercase">
-                        VANTIX<span className="text-blue-600">.</span>
+                        BITFONIZ<span className="text-blue-600">.</span>
                     </h1>
                     <div className="inline-block px-3 py-1 bg-blue-900/20 border border-blue-500/30 rounded-full mt-3">
                         <span className="text-[9px] font-bold uppercase tracking-widest text-blue-400">
@@ -111,7 +111,7 @@ export default function SignupPage() {
                             <input
                                 type="email"
                                 name="email"
-                                placeholder="samson@vantix.com"
+                                placeholder="samson@bitfoniz.com"
                                 className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
                                 required
                                 disabled={isPending}
@@ -161,7 +161,7 @@ export default function SignupPage() {
                             <label className="text-[10px] text-gray-500 leading-tight">
                                 I agree to the{" "}
                                 <span className="text-white font-bold">
-                                    Vantix Protocol Terms
+                                    Bitfoniz Protocol Terms
                                 </span>{" "}
                                 and conditions.
                             </label>

@@ -6,15 +6,15 @@ export default function Contact() {
                 <div>
                     <h2 className="text-4xl md:text-6xl font-black mb-6 text-white">Get in <span className="text-blue-500">Touch.</span></h2>
                     <p className="text-gray-400 text-lg mb-10 leading-relaxed max-w-md">
-                        Have questions about your Vantix portfolio? Our institutional support team is available 24/7 to assist with technical or financial queries.
+                        Have questions about your Bitfoniz portfolio? Our institutional support team is available 24/7 to assist with technical or financial queries.
                     </p>
 
                     <div className="space-y-6">
-                        <a href="mailto:support@vantix.com" className="flex items-center gap-6 p-6 bg-[#0F172A] border border-gray-800 rounded-[30px] hover:border-blue-500/50 transition group">
+                        <a href="mailto:support@bitfoniz.com" className="flex items-center gap-6 p-6 bg-[#0F172A] border border-gray-800 rounded-[30px] hover:border-blue-500/50 transition group">
                             <div className="w-14 h-14 bg-blue-900/20 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition">✉️</div>
                             <div>
                                 <div className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Email Support</div>
-                                <div className="text-white font-bold">support@vantix.com</div>
+                                <div className="text-white font-bold">support@bitfoniz.com</div>
                             </div>
                         </a>
 
@@ -22,7 +22,7 @@ export default function Contact() {
                             <div className="w-14 h-14 bg-blue-900/20 rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition">✈️</div>
                             <div>
                                 <div className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Official Telegram</div>
-                                <div className="text-white font-bold">@Vantix_Official</div>
+                                <div className="text-white font-bold">@Bitfoniz_Official</div>
                             </div>
                         </a>
                     </div>
