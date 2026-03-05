@@ -19,7 +19,12 @@ export default function InvestForm({ plan, userBalance }: { plan: any, userBalan
         startTransition(async () => {
             const result = await invest(plan.id, amount);
             if (result.error) {
-                setError(result.error);
+                if (result.error === "Insufficient balance") {
+                    // Redirect to deposit page with intended plan and amount
+                    router.push(`/dashboard/deposit?planId=${plan.id}&amount=${amount}`);
+                } else {
+                    setError(result.error);
+                }
             } else {
                 router.push("/dashboard/investments");
             }
@@ -71,8 +76,8 @@ export default function InvestForm({ plan, userBalance }: { plan: any, userBalan
                 type="submit"
                 disabled={isPending}
                 className={`w-full py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all duration-300 shadow-lg active:scale-95 ${isPending
-                        ? "bg-gray-600 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20"
+                    ? "bg-gray-600 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20"
                     }`}
             >
                 {isPending ? "Connecting to Pool..." : "Confirm & Activate"}

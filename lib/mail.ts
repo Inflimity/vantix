@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const domain = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://bitfoniz.icu";
 const adminEmail = process.env.ADMIN_EMAIL || "";
 
 /** Sanitize user input before injecting into HTML email templates */
@@ -113,6 +113,44 @@ export const sendWithdrawalApprovedEmail = async (email: string, fullName: strin
   });
 };
 
+// ==========================================
+// INVESTMENT ACTIVATED EMAILS
+// ==========================================
+
+export const sendInvestmentActivatedEmail = async (email: string, fullName: string, planName: string, amount: string, currency: string) => {
+  try {
+    const safeFullName = escapeHtml(fullName);
+    const safePlanName = escapeHtml(planName);
+    const safeAmount = escapeHtml(amount);
+
+    await resend.emails.send({
+      from: 'support@bitfoniz.icu',
+      to: email,
+      subject: 'Investment Protocol Activated 🚀',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; padding: 20px; color: #ffffff; border-radius: 10px;">
+          <h2 style="color: #3b82f6;">Investment Activated</h2>
+          <p>Hello ${safeFullName},</p>
+          <p>Your deposit has been approved, and your <strong>Auto-Invest</strong> protocol has been successfully activated!</p>
+          <div style="background-color: #0F172A; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 5px 0;"><strong>Plan:</strong> ${safePlanName}</p>
+            <p style="margin: 5px 0;"><strong>Amount Invested:</strong> $${safeAmount} ${currency}</p>
+            <p style="margin: 5px 0;"><strong>Status:</strong> Active</p>
+          </div>
+          <p>You can track your earnings directly from your dashboard.</p>
+          <br>
+          <p>Best regards,</p>
+          <p>The Support Team</p>
+        </div>
+      `,
+    });
+  } catch (error) {
+    console.error("Failed to send investment activation email:", error);
+  }
+};
+
+
+
 export const sendInvestmentEmail = async (email: string, fullName: string, planName: string, amount: string) => {
   if (!process.env.RESEND_API_KEY) return;
 
@@ -163,33 +201,12 @@ export const notifyAdminNewSignup = async (fullName: string, email: string) => {
   await resend.emails.send({
     from: "Bitfoniz Alerts <support@bitfoniz.icu>",
     to: adminEmail,
-    subject: "🆕 New User Signup",
+    subject: "Admin Alert: New User Signup",
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
-        <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
-        <h2 style="font-size: 22px; margin-top: 20px;">New User Registration</h2>
-        
-        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Name:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
-            </tr>
-          </table>
-        </div>
-
-        <a href="${domain}/admin/users" style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 10px;">
-          View Users
-        </a>
-      </div>
+      <p>NEW USER REGISTRATION</p>
+      <p>Name: ${escapeHtml(fullName)}</p>
+      <p>Email: ${escapeHtml(email)}</p>
+      <p>Time: ${new Date().toUTCString()}</p>
     `
   });
 };
@@ -200,37 +217,13 @@ export const notifyAdminDeposit = async (fullName: string, email: string, amount
   await resend.emails.send({
     from: "Bitfoniz Alerts <support@bitfoniz.icu>",
     to: adminEmail,
-    subject: `💰 Deposit Approved — $${amount}`,
+    subject: `Admin Alert: Deposit Approved - ${amount} ${currency}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
-        <h1 style="color: #10b981; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
-        <h2 style="font-size: 22px; margin-top: 20px;">Deposit Approved</h2>
-        
-        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">User:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Amount:</td>
-              <td style="color: #10b981; font-weight: bold; text-align: right;">${escapeHtml(amount)} ${escapeHtml(currency)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
-            </tr>
-          </table>
-        </div>
-
-        <a href="${domain}/admin/deposits" style="display: inline-block; background-color: #10b981; color: #020617; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 10px;">
-          View Deposits
-        </a>
-      </div>
+      <p>DEPOSIT APPROVED</p>
+      <p>User: ${escapeHtml(fullName)}</p>
+      <p>Email: ${escapeHtml(email)}</p>
+      <p>Amount: ${escapeHtml(amount)} ${escapeHtml(currency)}</p>
+      <p>Time: ${new Date().toUTCString()}</p>
     `
   });
 };
@@ -241,78 +234,31 @@ export const notifyAdminWithdrawal = async (fullName: string, email: string, amo
   await resend.emails.send({
     from: "Bitfoniz Alerts <support@bitfoniz.icu>",
     to: adminEmail,
-    subject: `💸 Withdrawal Approved — $${amount}`,
+    subject: `Admin Alert: Withdrawal Sent - ${amount} ${currency}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
-        <h1 style="color: #f59e0b; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
-        <h2 style="font-size: 22px; margin-top: 20px;">Withdrawal Processed</h2>
-        
-        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">User:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Amount:</td>
-              <td style="color: #f59e0b; font-weight: bold; text-align: right;">${escapeHtml(amount)} ${escapeHtml(currency)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
-            </tr>
-          </table>
-        </div>
-
-        <a href="${domain}/admin/withdrawals" style="display: inline-block; background-color: #f59e0b; color: #020617; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 10px;">
-          View Withdrawals
-        </a>
-      </div>
+      <p>WITHDRAWAL PROCESSED</p>
+      <p>User: ${escapeHtml(fullName)}</p>
+      <p>Email: ${escapeHtml(email)}</p>
+      <p>Amount: ${escapeHtml(amount)} ${escapeHtml(currency)}</p>
+      <p>Time: ${new Date().toUTCString()}</p>
     `
   });
 };
 
-export const notifyAdminInvestment = async (fullName: string, email: string, planName: string, amount: string) => {
+export const notifyAdminInvestment = async (fullName: string, email: string, planName: string, amount: string, currency: string) => {
   if (!process.env.RESEND_API_KEY || !adminEmail) return;
 
   await resend.emails.send({
     from: "Bitfoniz Alerts <support@bitfoniz.icu>",
     to: adminEmail,
-    subject: `🚀 New Investment — $${amount} in ${planName}`,
+    subject: `Admin Alert: New Investment - ${amount} in ${planName}`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
-        <h1 style="color: #8b5cf6; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
-        <h2 style="font-size: 22px; margin-top: 20px;">New Investment Activated</h2>
-        
-        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">User:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Plan:</td>
-              <td style="color: #8b5cf6; font-weight: bold; text-align: right;">${escapeHtml(planName)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Amount:</td>
-              <td style="color: #8b5cf6; font-weight: bold; text-align: right;">$${escapeHtml(amount)}</td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
-              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      <p>NEW INVESTMENT ACTIVATED</p>
+      <p>User: ${escapeHtml(fullName)}</p>
+      <p>Email: ${escapeHtml(email)}</p>
+      <p>Plan: ${escapeHtml(planName)}</p>
+      <p>Amount: ${escapeHtml(amount)} ${escapeHtml(currency)}</p>
+      <p>Time: ${new Date().toUTCString()}</p>
     `
   });
 };

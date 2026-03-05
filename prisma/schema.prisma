@@ -64,6 +64,7 @@ model Transaction {
   status        TransactionStatus @default(PENDING)
   gateway       String?
   walletAddress String?
+  targetPlanId  String?
   createdAt     DateTime          @default(now())
   user          User              @relation(fields: [userId], references: [id])
 

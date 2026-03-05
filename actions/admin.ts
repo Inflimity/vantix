@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { sendDepositApprovedEmail, sendWithdrawalApprovedEmail, notifyAdminDeposit, notifyAdminWithdrawal } from "@/lib/mail";
+import { sendDepositApprovedEmail, sendWithdrawalApprovedEmail, notifyAdminDeposit, notifyAdminWithdrawal, sendInvestmentActivatedEmail, notifyAdminInvestment } from "@/lib/mail";
 import { auth } from "@/auth";
 import { z } from "zod";
 
@@ -77,17 +77,68 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
             data: { status },
         });
 
-        // If APPOVED and DEPOSIT -> Add to Balance
+        // If APPROVED and DEPOSIT
         if (status === "APPROVED" && transaction.type === "DEPOSIT") {
-            await db.user.update({
-                where: { id: transaction.userId },
-                data: {
-                    balance: { increment: transaction.amount },
-                },
-            });
+            if (transaction.targetPlanId) {
+                // AUTO-INVEST Logic
+                const plan = await db.investmentPlan.findUnique({
+                    where: { id: transaction.targetPlanId }
+                });
 
-            // Send Email
-            // Send Email (Best effort)
+                if (plan && Number(transaction.amount) >= Number(plan.minDeposit)) {
+                    // Start an investment directly
+                    const endDate = new Date();
+                    endDate.setHours(endDate.getHours() + plan.cycleHours);
+
+                    await db.investment.create({
+                        data: {
+                            userId: transaction.userId,
+                            planId: plan.id,
+                            amount: transaction.amount,
+                            status: "ACTIVE",
+                            endDate: endDate
+                        }
+                    });
+
+                    // Send Investment Email
+                    try {
+                        await sendInvestmentActivatedEmail(
+                            transaction.user.email,
+                            transaction.user.fullName,
+                            plan.name,
+                            transaction.amount.toString(),
+                            "USD"
+                        );
+                        await notifyAdminInvestment(
+                            transaction.user.fullName,
+                            transaction.user.email,
+                            plan.name,
+                            transaction.amount.toString(),
+                            "USD"
+                        );
+                    } catch {
+                        // Email best-effort
+                    }
+                } else {
+                    // Fallback to normal balance add if plan doesn't exist or amount is too low
+                    await db.user.update({
+                        where: { id: transaction.userId },
+                        data: {
+                            balance: { increment: transaction.amount },
+                        },
+                    });
+                }
+            } else {
+                // NORMAL DEPOSIT Logic
+                await db.user.update({
+                    where: { id: transaction.userId },
+                    data: {
+                        balance: { increment: transaction.amount },
+                    },
+                });
+            }
+
+            // Send Deposit Approved Email
             try {
                 await sendDepositApprovedEmail(
                     transaction.user.email,

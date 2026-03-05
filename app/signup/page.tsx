@@ -79,7 +79,7 @@ export default function SignupPage() {
                                 <input
                                     type="text"
                                     name="fname"
-                                    placeholder="Musibau"
+                                    placeholder="Jane"
                                     className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
                                     required
                                     disabled={isPending}
@@ -94,7 +94,7 @@ export default function SignupPage() {
                                 <input
                                     type="text"
                                     name="lname"
-                                    placeholder="Samson"
+                                    placeholder="Doe"
                                     className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
                                     required
                                     disabled={isPending}
@@ -111,7 +111,7 @@ export default function SignupPage() {
                             <input
                                 type="email"
                                 name="email"
-                                placeholder="samson@bitfoniz.com"
+                                placeholder="janedoe@email.com"
                                 className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
                                 required
                                 disabled={isPending}

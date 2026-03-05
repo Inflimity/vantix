@@ -76,7 +76,7 @@ export const invest = async (planId: string, amount: number) => {
         // Send investment confirmation email + admin notification (best effort)
         try {
             await sendInvestmentEmail(user.email, user.fullName, plan.name, amount.toString());
-            await notifyAdminInvestment(user.fullName, user.email, plan.name, amount.toString());
+            await notifyAdminInvestment(user.fullName, user.email, plan.name, amount.toString(), "USD");
         } catch {
             // Email is non-critical; silently continue
         }
