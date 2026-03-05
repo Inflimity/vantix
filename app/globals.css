@@ -22,3 +22,21 @@ body {
 .serif {
   font-family: var(--font-fraunces), serif;
 }
+
+/* Hide Google Translate UI elements */
+.goog-te-banner-frame,
+.skiptranslate,
+.goog-te-spinner-pos,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-text-highlight,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-l4eHX-hSRGPd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe-OiiCO {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}

@@ -311,22 +311,6 @@ export default function GoogleTranslate() {
           </div>
         </div>
       )}
-
-      {/* Global Styles to hide Google Translate elements */}
-      <style jsx global>{`
-        .goog-te-banner-frame {
-          display: none !important;
-        }
-        body {
-          top: 0 !important;
-        }
-        .skiptranslate {
-          display: none !important;
-        }
-        .goog-te-spinner-pos {
-          display: none !important;
-        }
-      `}</style>
     </div>
   );
 }
