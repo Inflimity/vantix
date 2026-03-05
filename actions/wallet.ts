@@ -61,3 +61,29 @@ export const getWalletAddresses = async () => {
         orderBy: { currency: "asc" },
     });
 };
+
+export const saveUserWallet = async (currency: string, address: string) => {
+    const session = await auth();
+    if (!session?.user?.id) return { error: "Not authorized" };
+
+    try {
+        await db.userWallet.upsert({
+            where: {
+                userId_currency: {
+                    userId: session.user.id,
+                    currency: currency.toUpperCase(),
+                }
+            },
+            update: { address },
+            create: {
+                userId: session.user.id,
+                currency: currency.toUpperCase(),
+                address,
+            },
+        });
+
+        return { success: "Wallet address saved" };
+    } catch {
+        return { error: "Failed to save wallet address" };
+    }
+};

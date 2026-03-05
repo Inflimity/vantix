@@ -1,19 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { requestWithdrawal } from "@/actions/withdraw";
+import { saveUserWallet } from "@/actions/wallet";
 import { formatCurrency } from "@/lib/utils";
 
 interface WithdrawFormProps {
     balance: number;
+    user: {
+        id: string;
+        wallets?: { currency: string, address: string }[];
+    }
 }
 
-export default function WithdrawForm({ balance }: WithdrawFormProps) {
+export default function WithdrawForm({ balance, user }: WithdrawFormProps) {
     const [amount, setAmount] = useState<string>("");
     const [walletType, setWalletType] = useState<string>("USDT (ERC20)");
     const [walletAddress, setWalletAddress] = useState<string>("");
+    const [savedAddresses, setSavedAddresses] = useState<Record<string, string>>(
+        user.wallets?.reduce((acc: Record<string, string>, w: any) => ({ ...acc, [w.currency]: w.address }), {}) || {}
+    );
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    // Auto-populate address when network changes
+    useEffect(() => {
+        const saved = savedAddresses[walletType.toUpperCase()] || "";
+        setWalletAddress(saved);
+    }, [walletType, savedAddresses]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,9 +52,13 @@ export default function WithdrawForm({ balance }: WithdrawFormProps) {
         if (res.error) {
             setMessage({ type: 'error', text: res.error });
         } else if (res.success) {
+            // Save wallet address for future use
+            await saveUserWallet(walletType, walletAddress);
+
+            // Update local state for saved address
+            setSavedAddresses(prev => ({ ...prev, [walletType.toUpperCase()]: walletAddress }));
             setMessage({ type: 'success', text: res.success });
             setAmount("");
-            setWalletAddress("");
         }
         setLoading(false);
     };
@@ -86,8 +104,21 @@ export default function WithdrawForm({ balance }: WithdrawFormProps) {
                     >
                         <option value="USDT (TRC20)">USDT (TRC20)</option>
                         <option value="USDT (ERC20)">USDT (ERC20)</option>
+                        <option value="USDT (BEP20)">USDT (BEP20)</option>
                         <option value="Bitcoin (BTC)">Bitcoin (BTC)</option>
                         <option value="Ethereum (ETH)">Ethereum (ETH)</option>
+                        <option value="Binance Coin (BNB)">Binance Coin (BNB)</option>
+                        <option value="Solana (SOL)">Solana (SOL)</option>
+                        <option value="Cardano (ADA)">Cardano (ADA)</option>
+                        <option value="Ripple (XRP)">Ripple (XRP)</option>
+                        <option value="Polkadot (DOT)">Polkadot (DOT)</option>
+                        <option value="Dogecoin (DOGE)">Dogecoin (DOGE)</option>
+                        <option value="Shiba Inu (SHIB)">Shiba Inu (SHIB)</option>
+                        <option value="Litecoin (LTC)">Litecoin (LTC)</option>
+                        <option value="Chainlink (LINK)">Chainlink (LINK)</option>
+                        <option value="Polygon (MATIC)">Polygon (MATIC)</option>
+                        <option value="Tron (TRX)">Tron (TRX)</option>
+                        <option value="Bitcoin Cash (BCH)">Bitcoin Cash (BCH) </option>
                     </select>
                 </div>
 

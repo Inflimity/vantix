@@ -41,7 +41,8 @@ export const getDashboardData = async () => {
             transactions: {
                 orderBy: { createdAt: 'desc' },
                 take: 20
-            }
+            },
+            wallets: true
         } as any
     });
 

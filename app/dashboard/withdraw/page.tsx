@@ -11,7 +11,16 @@ export default async function WithdrawPage() {
 
     const user = await db.user.findUnique({
         where: { id: session.user.id },
-        select: { balance: true }
+        select: {
+            id: true,
+            balance: true,
+            wallets: {
+                select: {
+                    currency: true,
+                    address: true
+                }
+            }
+        }
     });
 
     if (!user) return redirect("/login");
@@ -22,7 +31,10 @@ export default async function WithdrawPage() {
             <p className="text-gray-500 mb-8">Request a payout to your external wallet.</p>
 
             <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-[30px] p-8">
-                <WithdrawForm balance={Number(user.balance)} />
+                <WithdrawForm
+                    balance={Number(user.balance)}
+                    user={user as any}
+                />
             </div>
         </div>
     );

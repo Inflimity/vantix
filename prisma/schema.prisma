@@ -21,6 +21,7 @@ model User {
   referredBy   String?
   investments  Investment[]
   transactions Transaction[]
+  wallets      UserWallet[]
 }
 
 model PasswordResetToken {
@@ -101,4 +102,16 @@ model WalletAddress {
   address   String
   label     String?
   updatedAt DateTime @updatedAt
+}
+
+model UserWallet {
+  id        String   @id @default(cuid())
+  userId    String
+  currency  String
+  address   String
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, currency])
+  @@index([userId])
 }
