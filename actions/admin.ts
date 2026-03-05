@@ -70,118 +70,68 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
             return { error: "Transaction is already processed" };
         }
 
-        // Update Transaction
-        await db.transaction.update({
-            where: { id: transactionId },
-            data: { status },
-        });
+        // PERFORM ATOMIC UPDATES
+        await db.$transaction(async (tx) => {
+            // 1. Update Transaction Status
+            await tx.transaction.update({
+                where: { id: transactionId },
+                data: { status },
+            });
 
-        // If APPROVED and DEPOSIT
-        if (status === "APPROVED" && transaction.type === "DEPOSIT") {
-            if (transaction.targetPlanId) {
-                // AUTO-INVEST Logic
-                const plan = await db.investmentPlan.findUnique({
-                    where: { id: transaction.targetPlanId }
-                });
-
-                if (plan && Number(transaction.amount) >= Number(plan.minDeposit)) {
-                    // Start an investment directly
-                    const endDate = new Date();
-                    endDate.setHours(endDate.getHours() + plan.cycleHours);
-
-                    await db.investment.create({
-                        data: {
-                            userId: transaction.userId,
-                            planId: plan.id,
-                            amount: transaction.amount,
-                            status: "ACTIVE",
-                            endDate: endDate
-                        }
+            // 2. Handle Logic based on Type and Status
+            if (status === "APPROVED" && transaction.type === "DEPOSIT") {
+                if (transaction.targetPlanId) {
+                    const plan = await tx.investmentPlan.findUnique({
+                        where: { id: transaction.targetPlanId }
                     });
 
-                    // Send Investment Email
-                    try {
-                        await sendInvestmentActivatedEmail(
-                            transaction.user.email,
-                            transaction.user.fullName,
-                            plan.name,
-                            transaction.amount.toString(),
-                            "USD"
-                        );
-                        await notifyAdminInvestment(
-                            transaction.user.fullName,
-                            transaction.user.email,
-                            plan.name,
-                            transaction.amount.toString(),
-                            "USD"
-                        );
-                    } catch {
-                        // Email best-effort
+                    if (plan && Number(transaction.amount) >= Number(plan.minDeposit)) {
+                        const endDate = new Date();
+                        endDate.setHours(endDate.getHours() + plan.cycleHours);
+
+                        await tx.investment.create({
+                            data: {
+                                userId: transaction.userId,
+                                planId: plan.id,
+                                amount: transaction.amount,
+                                status: "ACTIVE",
+                                endDate: endDate
+                            }
+                        });
+                    } else {
+                        await tx.user.update({
+                            where: { id: transaction.userId },
+                            data: { balance: { increment: transaction.amount } }
+                        });
                     }
                 } else {
-                    // Fallback to normal balance add if plan doesn't exist or amount is too low
-                    await db.user.update({
+                    await tx.user.update({
                         where: { id: transaction.userId },
-                        data: {
-                            balance: { increment: transaction.amount },
-                        },
+                        data: { balance: { increment: transaction.amount } }
                     });
                 }
-            } else {
-                // NORMAL DEPOSIT Logic
-                await db.user.update({
-                    where: { id: transaction.userId },
-                    data: {
-                        balance: { increment: transaction.amount },
-                    },
-                });
-            }
-
-            // Send Deposit Approved Email
-            try {
-                await sendDepositApprovedEmail(
-                    transaction.user.email,
-                    transaction.user.fullName,
-                    transaction.amount.toString(),
-                    "USD"
-                );
-                await notifyAdminDeposit(
-                    transaction.user.fullName,
-                    transaction.user.email,
-                    transaction.amount.toString(),
-                    "USD"
-                );
-            } catch {
-                // Email sending is best-effort
-            }
-        }
-
-        // If WITHDRAWAL
-        if (transaction.type === "WITHDRAWAL") {
-            if (status === "APPROVED") {
-                try {
-                    await sendWithdrawalApprovedEmail(
-                        transaction.user.email,
-                        transaction.user.fullName,
-                        transaction.amount.toString(),
-                        "USD"
-                    );
-                    await notifyAdminWithdrawal(
-                        transaction.user.fullName,
-                        transaction.user.email,
-                        transaction.amount.toString(),
-                        "USD"
-                    );
-                } catch {
-                    // Email sending is best-effort
-                }
-            } else if (status === "REJECTED") {
+            } else if (transaction.type === "WITHDRAWAL" && status === "REJECTED") {
                 // Refund the user balance
-                await db.user.update({
+                await tx.user.update({
                     where: { id: transaction.userId },
                     data: { balance: { increment: transaction.amount } }
                 });
             }
+        });
+
+        // Post-transaction notifications (Best effort, non-blocking)
+        try {
+            if (status === "APPROVED") {
+                if (transaction.type === "DEPOSIT") {
+                    await sendDepositApprovedEmail(transaction.user.email, transaction.user.fullName, transaction.amount.toString(), "USD");
+                    await notifyAdminDeposit(transaction.user.fullName, transaction.user.email, transaction.amount.toString(), "USD");
+                } else if (transaction.type === "WITHDRAWAL") {
+                    await sendWithdrawalApprovedEmail(transaction.user.email, transaction.user.fullName, transaction.amount.toString(), "USD");
+                    await notifyAdminWithdrawal(transaction.user.fullName, transaction.user.email, transaction.amount.toString(), "USD");
+                }
+            }
+        } catch {
+            // Emailing is non-critical
         }
 
         revalidatePath("/admin/deposits");

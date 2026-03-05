@@ -48,7 +48,10 @@ export const processMaturedInvestments = async (userId: string) => {
                 }),
                 // 2. Mark Investment as COMPLETED
                 db.investment.update({
-                    where: { id: investment.id },
+                    where: {
+                        id: investment.id,
+                        status: "ACTIVE" // Extra guard against double maturation
+                    },
                     data: { status: "COMPLETED" }
                 }),
                 // 3. Create Transaction record for the return
