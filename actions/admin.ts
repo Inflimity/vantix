@@ -27,8 +27,7 @@ export const updateUser = async (userId: string, data: { fullName?: string, emai
         await db.user.update({
             where: { id: userId },
             data: {
-                ...data,
-                // Ensure role cannot be updated through this action
+                ...validatedFields.data,
             }
         });
 

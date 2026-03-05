@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
     const [active, setActive] = useState(0);
@@ -123,12 +124,16 @@ export default function Hero() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-6 px-4">
-                    <button className="bg-blue-600 text-white px-8 py-3 md:px-12 md:py-5 rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition w-full sm:w-auto shadow-lg shadow-blue-900/40">
-                        Start Earning 40%
-                    </button>
-                    <button className="bg-[#0F172A] border border-gray-600 text-white px-8 py-3 md:px-12 md:py-5 rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-widest hover:bg-gray-800 transition w-full sm:w-auto">
-                        View Proof
-                    </button>
+                    <Link href="/signup" className="w-full sm:w-auto">
+                        <button className="bg-blue-600 text-white px-8 py-3 md:px-12 md:py-5 rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition w-full shadow-lg shadow-blue-900/40">
+                            Start Earning 40%
+                        </button>
+                    </Link>
+                    <Link href="/#testimonials" className="w-full sm:w-auto">
+                        <button className="bg-[#0F172A] border border-gray-600 text-white px-8 py-3 md:px-12 md:py-5 rounded-xl md:rounded-2xl font-black text-xs md:text-sm uppercase tracking-widest hover:bg-gray-800 transition w-full">
+                            View Proof
+                        </button>
+                    </Link>
                 </div>
             </div>
 

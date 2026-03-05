@@ -31,12 +31,18 @@ export default function Calculator() {
 
     // Derived values
     const profit = (amount * plan.roi) / 100;
-    const hourlyProfit = profit / plan.hours;
     const totalReturn = amount + profit;
 
     const handleInvest = () => {
         setError(null);
         setSuccess(null);
+
+        // Enforce minimum investment
+        if (amount < plan.min) {
+            setError(`Minimum investment for ${plan.name} is $${plan.min}`);
+            return;
+        }
+
         startTransition(async () => {
             const result = await invest(plan.name, amount);
             if (result.error) {
@@ -90,15 +96,9 @@ export default function Calculator() {
                             <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">Expected Net Profit</p>
                             <div className="text-4xl font-black text-emerald-400">${profit.toFixed(2)}</div>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
-                            <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Hourly Return</p>
-                                <div className="text-xl font-bold text-white">${hourlyProfit.toFixed(3)}</div>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Total Payline</p>
-                                <div className="text-xl font-bold text-white">${totalReturn.toFixed(2)}</div>
-                            </div>
+                        <div className="pt-6 border-t border-white/5">
+                            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Total Payline (ROI Included)</p>
+                            <div className="text-3xl font-bold text-white">${totalReturn.toFixed(2)}</div>
                         </div>
                     </div>
                 </div>

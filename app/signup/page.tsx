@@ -3,20 +3,38 @@
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { register } from "@/actions/register";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, Suspense } from "react";
 
 export default function SignupPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#020617] text-white">Loading...</div>}>
+            <SignupFormContent />
+        </Suspense>
+    );
+}
+
+function SignupFormContent() {
     const [formData, setFormData] = useState({
         fname: "",
         lname: "",
         email: "",
         password: "",
         confirmPassword: "",
+        referralCode: "",
     });
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const ref = searchParams.get("ref");
+
+    useEffect(() => {
+        if (ref) {
+            setFormData((prev) => ({ ...prev, referralCode: ref }));
+        }
+    }, [ref]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,7 +55,8 @@ export default function SignupPage() {
                 email: formData.email,
                 password: formData.password,
                 fullName: `${formData.fname} ${formData.lname}`,
-            })
+                referralCode: formData.referralCode,
+            } as any)
                 .then((data) => {
                     if (data.error) {
                         setError(data.error);
@@ -148,6 +167,21 @@ export default function SignupPage() {
                                 required
                                 disabled={isPending}
                                 value={formData.confirmPassword}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">
+                                Referral Code (Optional)
+                            </label>
+                            <input
+                                type="text"
+                                name="referralCode"
+                                placeholder="Referral Code"
+                                className="w-full bg-[#020617] border-2 border-[#1E293B] rounded-xl text-white px-[14px] py-[10px] outline-none transition-all duration-200 focus:border-blue-500 focus:bg-[#0F172A] text-sm"
+                                disabled={isPending}
+                                value={formData.referralCode}
                                 onChange={handleChange}
                             />
                         </div>

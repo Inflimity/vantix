@@ -14,7 +14,7 @@ export default function Pricing() {
                 <div className="bg-[#0F172A] p-8 rounded-[40px] border border-gray-800 hover:border-emerald-500 transition group">
                     <h3 className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-4">Beginner</h3>
                     <div className="text-5xl font-black text-white mb-2">6%</div>
-                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase">Hourly For 15 Hours</p>
+                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase">Profit After 15 Hours</p>
 
                     <div className="space-y-4 mb-8 text-sm text-gray-300 border-t border-gray-800 pt-6">
                         <div className="flex justify-between">
@@ -32,7 +32,7 @@ export default function Pricing() {
                 <div className="bg-[#0F172A] p-8 rounded-[40px] border border-gray-800 hover:border-emerald-500 transition group">
                     <h3 className="text-blue-400 font-bold uppercase tracking-widest text-sm mb-4">Beginners Pro</h3>
                     <div className="text-5xl font-black text-white mb-2">8%</div>
-                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase">Hourly For 20 Hours</p>
+                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase">Profit After 20 Hours</p>
 
                     <div className="space-y-4 mb-8 text-sm text-gray-300 border-t border-gray-800 pt-6">
                         <div className="flex justify-between">
@@ -50,7 +50,7 @@ export default function Pricing() {
                 <div className="bg-[#0F172A] p-8 rounded-[40px] border border-gray-800 hover:border-emerald-500 transition group">
                     <h3 className="text-purple-400 font-bold uppercase tracking-widest text-sm mb-4">Professional</h3>
                     <div className="text-5xl font-black text-white mb-2">11%</div>
-                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase">Hourly For 24 Hours</p>
+                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase">Profit After 24 Hours</p>
 
                     <div className="space-y-4 mb-8 text-sm text-gray-300 border-t border-gray-800 pt-6">
                         <div className="flex justify-between">
@@ -69,7 +69,7 @@ export default function Pricing() {
                     <div className="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-bl-xl rounded-tr-[35px]">Best Value</div>
                     <h3 className="text-white font-bold uppercase tracking-widest text-sm mb-4">Expert Business</h3>
                     <div className="text-5xl font-black text-white mb-2">26%</div>
-                    <p className="text-blue-400 font-bold text-sm mb-6 uppercase">Hourly For 36 Hours</p>
+                    <p className="text-blue-400 font-bold text-sm mb-6 uppercase">Profit After 36 Hours</p>
 
                     <div className="space-y-4 mb-8 text-sm text-gray-300 border-t border-blue-500/30 pt-6">
                         <div className="flex justify-between">
@@ -84,12 +84,10 @@ export default function Pricing() {
                     <Link href="/dashboard" className="block text-center w-full py-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-emerald-500 hover:text-black transition shadow-lg shadow-blue-500/40">Activate</Link>
                 </div>
 
-                {/* Promo Plan - Added as a 5th card or replace one? The user listed 5 plans. 
-                   The current grid is 4 columns. I'll add the 5th card. */}
                 <div className="bg-[#0F172A] p-8 rounded-[40px] border border-gray-800 hover:border-emerald-500 transition group lg:col-span-4 max-w-md mx-auto w-full">
                     <h3 className="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-4 text-center">Promo Plan</h3>
                     <div className="text-5xl font-black text-white mb-2 text-center">10%</div>
-                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase text-center">Hourly For 5 Hours</p>
+                    <p className="text-emerald-400 font-bold text-sm mb-6 uppercase text-center">Profit After 5 Hours</p>
 
                     <div className="space-y-4 mb-8 text-sm text-gray-300 border-t border-gray-800 pt-6">
                         <div className="flex justify-between">

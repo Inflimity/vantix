@@ -10,6 +10,7 @@ const RegisterSchema = z.object({
     password: z.string()
         .min(8, { message: "Minimum 8 characters required" }),
     fullName: z.string().min(1, { message: "Name is required" }),
+    referralCode: z.string().optional(),
 });
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
@@ -20,7 +21,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         return { error: firstError };
     }
 
-    const { email, password, fullName } = validatedFields.data;
+    const { email, password, fullName, referralCode } = validatedFields.data;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -32,12 +33,23 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         return { error: "Email already in use!" };
     }
 
+    let referredBy = null;
+    if (referralCode) {
+        const referrer = await db.user.findFirst({
+            where: { referralCode: referralCode } as any,
+        });
+        if (referrer) {
+            referredBy = referrer.id;
+        }
+    }
+
     await db.user.create({
         data: {
             fullName,
             email,
             password: hashedPassword,
-        },
+            referredBy: referredBy as string | null,
+        } as any,
     });
 
     // Send Welcome Email + Admin Notification (best-effort)

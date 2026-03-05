@@ -32,6 +32,7 @@ export const getDashboardData = async () => {
             balance: true,
             totalEarned: true,
             role: true,
+            referralCode: true,
             createdAt: true,
             updatedAt: true,
             investments: {
@@ -41,7 +42,7 @@ export const getDashboardData = async () => {
                 orderBy: { createdAt: 'desc' },
                 take: 20
             }
-        }
+        } as any
     });
 
     const plans = await db.investmentPlan.findMany();
