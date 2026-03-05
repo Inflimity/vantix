@@ -26,8 +26,7 @@ export default function LoginPage() {
                     }
                     if (data?.success) {
                         setSuccess(data.success);
-                        // Optionally redirect here if not handled by middleware/auth
-                        router.push("/dashboard");
+                        router.push(data.redirectUrl || "/dashboard");
                     }
                 })
                 .catch(() => setError("Something went wrong"));

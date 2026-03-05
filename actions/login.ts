@@ -38,9 +38,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         await signIn("credentials", {
             email,
             password,
-            redirectTo: redirectUrl,
+            redirect: false,
         });
-        return { success: "Logged in!" };
+        return { success: "Logged in!", redirectUrl };
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
@@ -50,6 +50,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
                     return { error: "Something went wrong!" };
             }
         }
-        throw error;
+        // Re-throw non-auth errors (e.g. network issues)
+        return { error: "Something went wrong!" };
     }
 };
