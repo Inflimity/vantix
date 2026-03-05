@@ -3,7 +3,7 @@
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { sendWelcomeEmail } from "@/lib/mail";
+import { sendWelcomeEmail, notifyAdminNewSignup } from "@/lib/mail";
 
 const RegisterSchema = z.object({
     email: z.string().email(),
@@ -44,12 +44,17 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         },
     });
 
-    // Send Welcome Email (Non-blocking: we don't await this to keep UI snappy, or we can await inside a try-catch)
-    // For critical emails like "Verify Email", we should await. For "Welcome", it's fine to fire and forget or await safely.
+    // Send Welcome Email + Admin Notification (best-effort)
     try {
         await sendWelcomeEmail(email, fullName);
     } catch {
         // Welcome email is non-critical; silently continue
+    }
+
+    try {
+        await notifyAdminNewSignup(fullName, email);
+    } catch {
+        // Admin notification is non-critical
     }
 
     return { success: "User created!" };

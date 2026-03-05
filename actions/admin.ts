@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { sendDepositApprovedEmail, sendWithdrawalApprovedEmail } from "@/lib/mail";
+import { sendDepositApprovedEmail, sendWithdrawalApprovedEmail, notifyAdminDeposit, notifyAdminWithdrawal } from "@/lib/mail";
 import { auth } from "@/auth";
 import { z } from "zod";
 
@@ -95,6 +95,12 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
                     transaction.amount.toString(),
                     "USD"
                 );
+                await notifyAdminDeposit(
+                    transaction.user.fullName,
+                    transaction.user.email,
+                    transaction.amount.toString(),
+                    "USD"
+                );
             } catch {
                 // Email sending is best-effort
             }
@@ -107,6 +113,12 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
                     await sendWithdrawalApprovedEmail(
                         transaction.user.email,
                         transaction.user.fullName,
+                        transaction.amount.toString(),
+                        "USD"
+                    );
+                    await notifyAdminWithdrawal(
+                        transaction.user.fullName,
+                        transaction.user.email,
                         transaction.amount.toString(),
                         "USD"
                     );

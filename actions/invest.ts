@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { sendInvestmentEmail, notifyAdminInvestment } from "@/lib/mail";
 
 const InvestSchema = z.object({
     planId: z.string().min(1),
@@ -71,6 +72,14 @@ export const invest = async (planId: string, amount: number) => {
                 }
             })
         ]);
+
+        // Send investment confirmation email + admin notification (best effort)
+        try {
+            await sendInvestmentEmail(user.email, user.fullName, plan.name, amount.toString());
+            await notifyAdminInvestment(user.fullName, user.email, plan.name, amount.toString());
+        } catch {
+            // Email is non-critical; silently continue
+        }
 
         revalidatePath("/dashboard");
         revalidatePath("/dashboard/investments");

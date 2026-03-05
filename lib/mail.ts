@@ -3,6 +3,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+const adminEmail = process.env.ADMIN_EMAIL || "";
 
 /** Sanitize user input before injecting into HTML email templates */
 function escapeHtml(str: string): string {
@@ -21,7 +22,7 @@ export const sendWelcomeEmail = async (email: string, fullName: string) => {
   }
 
   await resend.emails.send({
-    from: "Bitfoniz Support <onboarding@resend.dev>", // Note: Use 'onboarding@resend.dev' for testing without a domain
+    from: "Bitfoniz Support <support@bitfoniz.icu>",
     to: email,
     subject: "Welcome to Bitfoniz Protocol 🚀",
     html: `
@@ -62,7 +63,7 @@ export const sendDepositApprovedEmail = async (email: string, fullName: string, 
   if (!process.env.RESEND_API_KEY) return;
 
   await resend.emails.send({
-    from: "Bitfoniz Support <payments@resend.dev>",
+    from: "Bitfoniz Support <support@bitfoniz.icu>",
     to: email,
     subject: "Deposit Approved 💰",
     html: `
@@ -91,7 +92,7 @@ export const sendWithdrawalApprovedEmail = async (email: string, fullName: strin
   if (!process.env.RESEND_API_KEY) return;
 
   await resend.emails.send({
-    from: "Bitfoniz Support <payments@resend.dev>",
+    from: "Bitfoniz Support <support@bitfoniz.icu>",
     to: email,
     subject: "Withdrawal Sent 💸",
     html: `
@@ -116,7 +117,7 @@ export const sendInvestmentEmail = async (email: string, fullName: string, planN
   if (!process.env.RESEND_API_KEY) return;
 
   await resend.emails.send({
-    from: "Bitfoniz Support <invest@resend.dev>",
+    from: "Bitfoniz Support <support@bitfoniz.icu>",
     to: email,
     subject: "Investment Protocol Activated 🚀",
     html: `
@@ -152,6 +153,170 @@ export const sendInvestmentEmail = async (email: string, fullName: string, planN
   });
 };
 
+// ==========================================
+// ADMIN NOTIFICATION EMAILS
+// ==========================================
+
+export const notifyAdminNewSignup = async (fullName: string, email: string) => {
+  if (!process.env.RESEND_API_KEY || !adminEmail) return;
+
+  await resend.emails.send({
+    from: "Bitfoniz Alerts <support@bitfoniz.icu>",
+    to: adminEmail,
+    subject: "🆕 New User Signup",
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
+        <h1 style="color: #3b82f6; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
+        <h2 style="font-size: 22px; margin-top: 20px;">New User Registration</h2>
+        
+        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Name:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
+            </tr>
+          </table>
+        </div>
+
+        <a href="${domain}/admin/users" style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 10px;">
+          View Users
+        </a>
+      </div>
+    `
+  });
+};
+
+export const notifyAdminDeposit = async (fullName: string, email: string, amount: string, currency: string) => {
+  if (!process.env.RESEND_API_KEY || !adminEmail) return;
+
+  await resend.emails.send({
+    from: "Bitfoniz Alerts <support@bitfoniz.icu>",
+    to: adminEmail,
+    subject: `💰 Deposit Approved — $${amount}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
+        <h1 style="color: #10b981; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
+        <h2 style="font-size: 22px; margin-top: 20px;">Deposit Approved</h2>
+        
+        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">User:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Amount:</td>
+              <td style="color: #10b981; font-weight: bold; text-align: right;">${escapeHtml(amount)} ${escapeHtml(currency)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
+            </tr>
+          </table>
+        </div>
+
+        <a href="${domain}/admin/deposits" style="display: inline-block; background-color: #10b981; color: #020617; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 10px;">
+          View Deposits
+        </a>
+      </div>
+    `
+  });
+};
+
+export const notifyAdminWithdrawal = async (fullName: string, email: string, amount: string, currency: string) => {
+  if (!process.env.RESEND_API_KEY || !adminEmail) return;
+
+  await resend.emails.send({
+    from: "Bitfoniz Alerts <support@bitfoniz.icu>",
+    to: adminEmail,
+    subject: `💸 Withdrawal Approved — $${amount}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
+        <h1 style="color: #f59e0b; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
+        <h2 style="font-size: 22px; margin-top: 20px;">Withdrawal Processed</h2>
+        
+        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">User:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Amount:</td>
+              <td style="color: #f59e0b; font-weight: bold; text-align: right;">${escapeHtml(amount)} ${escapeHtml(currency)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
+            </tr>
+          </table>
+        </div>
+
+        <a href="${domain}/admin/withdrawals" style="display: inline-block; background-color: #f59e0b; color: #020617; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-top: 10px;">
+          View Withdrawals
+        </a>
+      </div>
+    `
+  });
+};
+
+export const notifyAdminInvestment = async (fullName: string, email: string, planName: string, amount: string) => {
+  if (!process.env.RESEND_API_KEY || !adminEmail) return;
+
+  await resend.emails.send({
+    from: "Bitfoniz Alerts <support@bitfoniz.icu>",
+    to: adminEmail,
+    subject: `🚀 New Investment — $${amount} in ${planName}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #020617; color: #ffffff; padding: 40px; border-radius: 10px;">
+        <h1 style="color: #8b5cf6; text-transform: uppercase; letter-spacing: 2px; font-size: 16px;">Admin Alert</h1>
+        <h2 style="font-size: 22px; margin-top: 20px;">New Investment Activated</h2>
+        
+        <div style="background-color: #0f172a; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #1e293b;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">User:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(fullName)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Email:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${escapeHtml(email)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Plan:</td>
+              <td style="color: #8b5cf6; font-weight: bold; text-align: right;">${escapeHtml(planName)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Amount:</td>
+              <td style="color: #8b5cf6; font-weight: bold; text-align: right;">$${escapeHtml(amount)}</td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; padding: 8px 0;">Time:</td>
+              <td style="color: #ffffff; font-weight: bold; text-align: right;">${new Date().toUTCString()}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    `
+  });
+};
+
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetLink = `${domain}/new-password?token=${token}`;
 
@@ -161,7 +326,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
   try {
     const data = await resend.emails.send({
-      from: "Bitfoniz Support <security@resend.dev>",
+      from: "Bitfoniz Support <support@bitfoniz.icu>",
       to: email,
       subject: "Reset your BITFONIZ password",
       html: `
