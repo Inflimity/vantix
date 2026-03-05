@@ -10,20 +10,29 @@ import { NextResponse } from "next/server";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-// Define a general rate limit (e.g., 50 requests per 10 seconds per IP)
-// For auth routes, we might want stricter limits, but let's start with a global limit.
-const globalRateLimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(50, "10 s"),
-    analytics: true,
-});
+// Lazy-initialize rate limiters only when Upstash credentials are available
+let globalRateLimit: Ratelimit | null = null;
+let authRateLimit: Ratelimit | null = null;
 
-const authRateLimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(5, "1 m"),
-    analytics: true,
-});
-
+function getRateLimiters() {
+    if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
+        return null;
+    }
+    if (!globalRateLimit) {
+        const redis = Redis.fromEnv();
+        globalRateLimit = new Ratelimit({
+            redis,
+            limiter: Ratelimit.slidingWindow(50, "10 s"),
+            analytics: true,
+        });
+        authRateLimit = new Ratelimit({
+            redis,
+            limiter: Ratelimit.slidingWindow(5, "1 m"),
+            analytics: true,
+        });
+    }
+    return { globalRateLimit, authRateLimit: authRateLimit! };
+}
 const { auth } = NextAuth(authConfig);
 
 export default auth(async (req) => {
@@ -32,10 +41,11 @@ export default auth(async (req) => {
 
     // Rate limiting check
     try {
-        if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+        const limiters = getRateLimiters();
+        if (limiters) {
             const isAuthReq = authRoutes.includes(nextUrl.pathname) || nextUrl.pathname.startsWith(apiAuthPrefix);
             if (isAuthReq) {
-                const { success: authSuccess, limit: authLimit, reset: authReset, remaining: authRemaining } = await authRateLimit.limit(`auth_${ip}`);
+                const { success: authSuccess, limit: authLimit, reset: authReset, remaining: authRemaining } = await limiters.authRateLimit.limit(`auth_${ip}`);
                 if (!authSuccess) {
                     return new NextResponse("Too Many Authentication Attempts", {
                         status: 429,
@@ -48,7 +58,7 @@ export default auth(async (req) => {
                 }
             }
 
-            const { success, limit, reset, remaining } = await globalRateLimit.limit(`global_${ip}`);
+            const { success, limit, reset, remaining } = await limiters.globalRateLimit.limit(`global_${ip}`);
             if (!success) {
                 return new NextResponse("Too Many Requests", {
                     status: 429,
