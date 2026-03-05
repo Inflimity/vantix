@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 
 import Script from "next/script";
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,6 +34,7 @@ export default function RootLayout({
       <body
         className={`${jakarta.variable} ${fraunces.variable} antialiased`}
       >
+        <Toaster position="top-right" richColors />
         {children}
         <Script id="tawk-to-script" strategy="afterInteractive">
           {`

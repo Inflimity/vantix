@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { sendInvestmentEmail, notifyAdminInvestment } from "@/lib/mail";
+import { TransactionType } from "@prisma/client";
 
 const InvestSchema = z.object({
     planId: z.string().min(1),
@@ -43,48 +44,38 @@ export const invest = async (planId: string, amount: number) => {
             return { error: "Insufficient balance" };
         }
 
-        // 3. Perform Transaction (Atomic)
+        // 3. Perform Transaction (Atomic Request)
         await db.$transaction([
-            // Deduct balance
+            // Deduct balance immediately to "lock" the funds for the request
             db.user.update({
                 where: { id: userId },
                 data: { balance: { decrement: amount } }
             }),
-            // Create investment
-            db.investment.create({
-                data: {
-                    userId,
-                    planId,
-                    amount,
-                    status: "ACTIVE",
-                    endDate: new Date(Date.now() + plan.cycleHours * 60 * 60 * 1000),
-                }
-            }),
-            // Create record transaction
+            // Create a PENDING investment transaction for admin approval
             db.transaction.create({
                 data: {
                     userId,
-                    type: "WITHDRAWAL", // We treat this as a internal debit for records
+                    type: "INVESTMENT" as any,
                     amount,
-                    status: "APPROVED",
+                    status: "PENDING",
+                    targetPlanId: planId,
                     gateway: "PLATFORM_INVESTMENT",
                     walletAddress: plan.name,
                 }
             })
         ]);
 
-        // Send investment confirmation email + admin notification (best effort)
+        // Send notification to admin about the new request
         try {
-            await sendInvestmentEmail(user.email, user.fullName, plan.name, amount.toString());
             await notifyAdminInvestment(user.fullName, user.email, plan.name, amount.toString(), "USD");
         } catch {
-            // Email is non-critical; silently continue
+            // Non-critical
         }
 
         revalidatePath("/dashboard");
         revalidatePath("/dashboard/investments");
 
-        return { success: `Successfully invested $${amount} in ${plan.name}!` };
+        return { success: `Investment request for $${amount} in ${plan.name} submitted for approval!` };
     } catch {
         return { error: "Failed to process investment" };
     }

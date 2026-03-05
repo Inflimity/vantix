@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { updateTransactionStatus } from "@/actions/admin";
+import AdminActionButton from "@/app/components/Admin/AdminActionButton";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import FormattedDate from "../../components/FormattedDate";
@@ -49,22 +49,18 @@ export default async function AdminDepositsPage() {
                                         </td>
                                         <td className="p-6">
                                             <div className="flex gap-2">
-                                                <form action={async () => {
-                                                    "use server";
-                                                    await updateTransactionStatus(tx.id, "APPROVED");
-                                                }}>
-                                                    <button className="bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-lg text-[10px] font-bold uppercase transition">
-                                                        Approve
-                                                    </button>
-                                                </form>
-                                                <form action={async () => {
-                                                    "use server";
-                                                    await updateTransactionStatus(tx.id, "REJECTED");
-                                                }}>
-                                                    <button className="bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-3 py-2 rounded-lg text-[10px] font-bold uppercase transition">
-                                                        Reject
-                                                    </button>
-                                                </form>
+                                                <AdminActionButton
+                                                    transactionId={tx.id}
+                                                    status="APPROVED"
+                                                    label="Approve"
+                                                    className="bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-lg text-[10px] font-bold uppercase transition"
+                                                />
+                                                <AdminActionButton
+                                                    transactionId={tx.id}
+                                                    status="REJECTED"
+                                                    label="Reject"
+                                                    className="bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white px-3 py-2 rounded-lg text-[10px] font-bold uppercase transition"
+                                                />
                                             </div>
                                         </td>
                                     </tr>

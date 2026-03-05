@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { sendDepositApprovedEmail, sendWithdrawalApprovedEmail, notifyAdminDeposit, notifyAdminWithdrawal, sendInvestmentActivatedEmail, notifyAdminInvestment } from "@/lib/mail";
 import { auth } from "@/auth";
 import { z } from "zod";
+import { TransactionType } from "@prisma/client";
 
 const UpdateUserSchema = z.object({
     fullName: z.string().min(1).optional(),
@@ -110,6 +111,35 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
                         data: { balance: { increment: transaction.amount } }
                     });
                 }
+            } else if (transaction.type === TransactionType.INVESTMENT) {
+                if (status === "APPROVED") {
+                    if (transaction.targetPlanId) {
+                        const plan = await tx.investmentPlan.findUnique({
+                            where: { id: transaction.targetPlanId }
+                        });
+
+                        if (plan) {
+                            const endDate = new Date();
+                            endDate.setHours(endDate.getHours() + plan.cycleHours);
+
+                            await tx.investment.create({
+                                data: {
+                                    userId: transaction.userId,
+                                    planId: plan.id,
+                                    amount: transaction.amount,
+                                    status: "ACTIVE",
+                                    endDate: endDate
+                                }
+                            });
+                        }
+                    }
+                } else if (status === "REJECTED") {
+                    // Refund the user balance if investment is rejected
+                    await tx.user.update({
+                        where: { id: transaction.userId },
+                        data: { balance: { increment: transaction.amount } }
+                    });
+                }
             } else if (transaction.type === "WITHDRAWAL" && status === "REJECTED") {
                 // Refund the user balance
                 await tx.user.update({
@@ -125,9 +155,11 @@ export const updateTransactionStatus = async (transactionId: string, status: "AP
                 if (transaction.type === "DEPOSIT") {
                     await sendDepositApprovedEmail(transaction.user.email, transaction.user.fullName, transaction.amount.toString(), "USD");
                     await notifyAdminDeposit(transaction.user.fullName, transaction.user.email, transaction.amount.toString(), "USD");
-                } else if (transaction.type === "WITHDRAWAL") {
+                } else if (transaction.type === TransactionType.WITHDRAWAL) {
                     await sendWithdrawalApprovedEmail(transaction.user.email, transaction.user.fullName, transaction.amount.toString(), "USD");
                     await notifyAdminWithdrawal(transaction.user.fullName, transaction.user.email, transaction.amount.toString(), "USD");
+                } else if ((transaction.type as any) === "INVESTMENT") {
+                    await sendInvestmentActivatedEmail(transaction.user.email, transaction.user.fullName, "Investment Plan", transaction.amount.toString(), "USD");
                 }
             }
         } catch {

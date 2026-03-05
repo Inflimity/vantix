@@ -17,6 +17,7 @@ export default function AdminSidebar() {
         { name: 'Global Ledger', path: '/admin/transactions', icon: '📖' },
         { name: 'Pending Deposits', path: '/admin/deposits', icon: '📥' },
         { name: 'Payout Requests', path: '/admin/withdrawals', icon: '📤' },
+        { name: 'Investment Approvals', path: '/admin/investments', icon: '💎' },
         { name: 'Deposit Wallets', path: '/admin/wallets', icon: '💳' },
         { name: 'Plan Settings', path: '/admin/plans', icon: '📈' },
     ];
