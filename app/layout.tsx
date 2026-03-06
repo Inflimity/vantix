@@ -18,6 +18,42 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "Bitfoniz — Secure Crypto Investment Platform",
   description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
+  applicationName: "Bitfoniz",
+  keywords: ["Crypto Investment", "Automated Trading", "Bitcoin", "Secure Investment Platform", "Yield Farming", "Algorithmic Trading", "DeFi"],
+  authors: [{ name: "Bitfoniz Protocol", url: "https://bitfoniz.com" }],
+  creator: "Bitfoniz Protocol",
+  publisher: "Bitfoniz",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    title: "Bitfoniz — Secure Crypto Investment Platform",
+    description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
+    url: "https://bitfoniz.com",
+    siteName: "Bitfoniz",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bitfoniz — Secure Crypto Investment Platform",
+    description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
+  },
+  other: {
+    // Advanced Geo Tagging mapping
+    "geo.region": "US",
+    "geo.placename": "New York",
+    "geo.position": "40.7128;-74.0060",
+    "ICBM": "40.7128, -74.0060",
+  }
 };
 
 import Script from "next/script";
