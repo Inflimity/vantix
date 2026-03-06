@@ -6,6 +6,7 @@ export const publicRoutes = [
     "/api/auth/callback/github",
     "/reset-password",
     "/new-password",
+    "/api/keep-alive",
 ];
 
 export const authRoutes = [
