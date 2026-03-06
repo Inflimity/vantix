@@ -41,4 +41,8 @@ export default {
             return token;
         }
     },
+    session: {
+        strategy: "jwt",
+        maxAge: 60 * 60, // 1 hour session
+    },
 } satisfies NextAuthConfig

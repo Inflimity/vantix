@@ -23,6 +23,8 @@ export const metadata: Metadata = {
 import Script from "next/script";
 
 import { Toaster } from "sonner";
+import { SessionProvider } from "next-auth/react";
+import AutoLogout from "./components/AutoLogout";
 
 export default function RootLayout({
   children,
@@ -34,8 +36,11 @@ export default function RootLayout({
       <body
         className={`${jakarta.variable} ${fraunces.variable} antialiased`}
       >
-        <Toaster position="top-right" richColors />
-        {children}
+        <SessionProvider>
+          <AutoLogout />
+          <Toaster position="top-right" richColors />
+          {children}
+        </SessionProvider>
         <Script id="tawk-to-script" strategy="afterInteractive">
           {`
             var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
