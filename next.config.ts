@@ -11,10 +11,10 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://translate.google.com https://translate.googleapis.com https://translate-pa.googleapis.com https://www.gstatic.com https://embed.tawk.to",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://embed.tawk.to",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://translate.google.com https://translate.googleapis.com https://translate-pa.googleapis.com https://www.gstatic.com https://embed.tawk.to https://cdn.jsdelivr.net",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://embed.tawk.to https://www.gstatic.com",
               "img-src 'self' blob: data: https: https://*.tawk.to",
-              "font-src 'self' data: https://fonts.gstatic.com",
+              "font-src 'self' data: https://fonts.gstatic.com https://fonts.googleapis.com",
               "connect-src 'self' https: wss: https://*.tawk.to wss://*.tawk.to",
               "frame-src https://translate.google.com",
             ].join("; "),
