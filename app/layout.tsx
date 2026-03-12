@@ -16,6 +16,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://eldvora.com"),
   title: "Eldvora — Secure Crypto Investment Platform",
   description: "Invest smarter with Eldvora. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
   applicationName: "Eldvora",
