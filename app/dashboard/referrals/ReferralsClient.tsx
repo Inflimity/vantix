@@ -12,7 +12,7 @@ export default function ReferralsClient({ user }: { user: any }) {
 
     // Get protocol and host for the link
     // Use production URL from env or fallback to current origin
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://eldvora.icu');
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://eldvora.com');
     const referralLink = `${baseUrl}/signup?ref=${user.referralCode || user.id}`;
 
     const handleCopy = () => {

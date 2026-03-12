@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const domain = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://eldvora.icu";
+const domain = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || "https://eldvora.com";
 const adminEmail = process.env.ADMIN_EMAIL || "";
 
 /** Sanitize user input before injecting into HTML email templates */
@@ -22,7 +22,7 @@ export const sendWelcomeEmail = async (email: string, fullName: string) => {
   }
 
   await resend.emails.send({
-    from: "Eldvora Support <support@eldvora.icu>",
+    from: "Eldvora Support <support@eldvora.com>",
     to: email,
     subject: "Welcome to Eldvora Protocol 🚀",
     html: `
@@ -63,7 +63,7 @@ export const sendDepositApprovedEmail = async (email: string, fullName: string, 
   if (!process.env.RESEND_API_KEY) return;
 
   await resend.emails.send({
-    from: "Eldvora Support <support@eldvora.icu>",
+    from: "Eldvora Support <support@eldvora.com>",
     to: email,
     subject: "Deposit Approved 💰",
     html: `
@@ -92,7 +92,7 @@ export const sendWithdrawalApprovedEmail = async (email: string, fullName: strin
   if (!process.env.RESEND_API_KEY) return;
 
   await resend.emails.send({
-    from: "Eldvora Support <support@eldvora.icu>",
+    from: "Eldvora Support <support@eldvora.com>",
     to: email,
     subject: "Withdrawal Sent 💸",
     html: `
@@ -124,7 +124,7 @@ export const sendInvestmentActivatedEmail = async (email: string, fullName: stri
     const safeAmount = escapeHtml(amount);
 
     await resend.emails.send({
-      from: 'support@eldvora.icu',
+      from: 'support@eldvora.com',
       to: email,
       subject: 'Investment Protocol Activated 🚀',
       html: `
@@ -155,7 +155,7 @@ export const sendInvestmentEmail = async (email: string, fullName: string, planN
   if (!process.env.RESEND_API_KEY) return;
 
   await resend.emails.send({
-    from: "Eldvora Support <support@eldvora.icu>",
+    from: "Eldvora Support <support@eldvora.com>",
     to: email,
     subject: "Investment Protocol Activated 🚀",
     html: `
@@ -199,7 +199,7 @@ export const notifyAdminNewSignup = async (fullName: string, email: string) => {
   if (!process.env.RESEND_API_KEY || !adminEmail) return;
 
   await resend.emails.send({
-    from: "Eldvora Alerts <support@eldvora.icu>",
+    from: "Eldvora Alerts <support@eldvora.com>",
     to: adminEmail,
     subject: "Admin Alert: New User Signup",
     html: `
@@ -215,7 +215,7 @@ export const notifyAdminDeposit = async (fullName: string, email: string, amount
   if (!process.env.RESEND_API_KEY || !adminEmail) return;
 
   await resend.emails.send({
-    from: "Eldvora Alerts <support@eldvora.icu>",
+    from: "Eldvora Alerts <support@eldvora.com>",
     to: adminEmail,
     subject: `Admin Alert: Deposit Approved - ${amount} ${currency}`,
     html: `
@@ -232,7 +232,7 @@ export const notifyAdminWithdrawal = async (fullName: string, email: string, amo
   if (!process.env.RESEND_API_KEY || !adminEmail) return;
 
   await resend.emails.send({
-    from: "Eldvora Alerts <support@eldvora.icu>",
+    from: "Eldvora Alerts <support@eldvora.com>",
     to: adminEmail,
     subject: `Admin Alert: Withdrawal Sent - ${amount} ${currency}`,
     html: `
@@ -249,7 +249,7 @@ export const notifyAdminInvestment = async (fullName: string, email: string, pla
   if (!process.env.RESEND_API_KEY || !adminEmail) return;
 
   await resend.emails.send({
-    from: "Eldvora Alerts <support@eldvora.icu>",
+    from: "Eldvora Alerts <support@eldvora.com>",
     to: adminEmail,
     subject: `Admin Alert: New Investment - ${amount} in ${planName}`,
     html: `
@@ -272,7 +272,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
   try {
     const data = await resend.emails.send({
-      from: "Eldvora Support <support@eldvora.icu>",
+      from: "Eldvora Support <support@eldvora.com>",
       to: email,
       subject: "Reset your ELDVORA password",
       html: `
