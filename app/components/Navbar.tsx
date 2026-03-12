@@ -10,8 +10,8 @@ export default function Navbar() {
     return (
         <nav className="fixed w-full z-50 px-6 py-4">
             <div className="max-w-6xl mx-auto bg-[#0F172A] border border-blue-900/30 rounded-2xl px-6 py-3 flex justify-between items-center shadow-lg shadow-black/50 relative">
-                <div className="font-extrabold text-xl tracking-tighter text-white">
-                    ELDVORA<span className="text-emerald-500">.</span>
+                <div className="font-extrabold text-xl tracking-tighter">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-amber-500">ELDVORA</span><span className="text-emerald-500">.</span>
                 </div>
 
                 <div className="hidden md:flex gap-8 text-sm font-bold text-gray-400">

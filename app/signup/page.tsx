@@ -77,7 +77,7 @@ function SignupFormContent() {
             <div className="w-full max-w-[420px]">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-black tracking-tighter uppercase">
-                        ELDVORA<span className="text-blue-600">.</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-amber-500">ELDVORA</span><span className="text-blue-600">.</span>
                     </h1>
                     <div className="inline-block px-3 py-1 bg-blue-900/20 border border-blue-500/30 rounded-full mt-3">
                         <span className="text-[9px] font-bold uppercase tracking-widest text-blue-400">

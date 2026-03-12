@@ -3,7 +3,7 @@ export default function Footer() {
         <footer className="bg-[#0F172A] border-t border-gray-800 pt-20 pb-10 px-6 text-white">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
                 <div className="col-span-1 md:col-span-2">
-                    <div className="text-3xl font-black mb-6">ELDVORA<span className="text-emerald-400">.</span></div>
+                    <div className="text-3xl font-black mb-6"><span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-amber-500">ELDVORA</span><span className="text-emerald-400">.</span></div>
                     <p className="text-gray-400 max-w-xs leading-relaxed">A specialized crypto rebranding project focused on high-performance UI and user joy.</p>
                 </div>
                 <div>

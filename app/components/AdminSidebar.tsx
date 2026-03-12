@@ -27,7 +27,7 @@ export default function AdminSidebar() {
             {/* Mobile Header */}
             <div className="lg:hidden flex items-center justify-between p-4 bg-[#0F172A] border-b border-[#1E293B] sticky top-0 z-50">
                 <div className="font-black text-xl tracking-tighter text-white uppercase">
-                    ELDVORA<span className="text-orange-500">_ROOT</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-amber-500">ELDVORA</span><span className="text-orange-500">_ROOT</span>
                 </div>
                 <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -60,7 +60,7 @@ export default function AdminSidebar() {
                 ${isOpen ? "translate-x-0" : "-translate-x-full"}
             `}>
                 <div className="mb-12 hidden lg:block">
-                    <div className="font-black text-2xl tracking-tighter text-white uppercase">ELDVORA<span className="text-orange-500">_ROOT</span></div>
+                    <div className="font-black text-2xl tracking-tighter text-white uppercase"><span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-amber-500">ELDVORA</span><span className="text-orange-500">_ROOT</span></div>
                     <p className="text-[9px] text-gray-500 font-bold tracking-[0.3em] mt-2">System Administrator</p>
                 </div>
 
