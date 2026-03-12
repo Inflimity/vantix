@@ -274,15 +274,15 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     const data = await resend.emails.send({
       from: "Eldvora Support <support@eldvora.icu>",
       to: email,
-      subject: "Reset your BITFONIZ password",
+      subject: "Reset your ELDVORA password",
       html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
                 <div style="background-color: #020617; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-                    <h1 style="color: #ffffff; margin: 0; font-family: 'Arial Black', sans-serif; letter-spacing: -2px;">BITFONIZ<span style="color: #2563eb;">.</span></h1>
+                    <h1 style="color: #ffffff; margin: 0; font-family: 'Arial Black', sans-serif; letter-spacing: -2px;">ELDVORA<span style="color: #2563eb;">.</span></h1>
                 </div>
                 <div style="background-color: #ffffff; padding: 40px; border-radius: 0 0 10px 10px;">
                     <h2 style="color: #1a1a1a; margin-top: 0;">Reset Password Request</h2>
-                    <p style="color: #555555; line-height: 1.6;">We received a request to reset your password for the BITFONIZ Secure Protocol.</p>
+                    <p style="color: #555555; line-height: 1.6;">We received a request to reset your password for the ELDVORA Secure Protocol.</p>
                     <div style="text-align: center; margin: 30px 0;">
                         <a href="${resetLink}" style="background-color: #2563eb; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;">Secure Reset Link</a>
                     </div>

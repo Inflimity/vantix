@@ -11,7 +11,7 @@ export default function UserSidebar() {
         <>
             <header className="lg:hidden flex justify-between items-center p-6 bg-[#0F172A] border-b border-[#1E293B]">
                 <div className="font-black text-xl tracking-tighter uppercase">
-                    BITFONIZ<span className="text-blue-500">.</span>
+                    ELDVORA<span className="text-blue-500">.</span>
                 </div>
                 <button onClick={() => setSideBarOpen(true)} className="text-white">
                     <svg
@@ -36,7 +36,7 @@ export default function UserSidebar() {
             >
                 <div className="flex justify-between items-center mb-10">
                     <div className="font-black text-2xl tracking-tighter uppercase">
-                        BITFONIZ<span className="text-blue-500">.</span>
+                        ELDVORA<span className="text-blue-500">.</span>
                     </div>
                     <button
                         onClick={() => setSideBarOpen(false)}
