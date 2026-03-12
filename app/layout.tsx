@@ -16,13 +16,13 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Bitfoniz — Secure Crypto Investment Platform",
-  description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
-  applicationName: "Bitfoniz",
+  title: "Eldvora — Secure Crypto Investment Platform",
+  description: "Invest smarter with Eldvora. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
+  applicationName: "Eldvora",
   keywords: ["Crypto Investment", "Automated Trading", "Bitcoin", "Secure Investment Platform", "Yield Farming", "Algorithmic Trading", "DeFi"],
-  authors: [{ name: "Bitfoniz Protocol", url: "https://bitfoniz.com" }],
-  creator: "Bitfoniz Protocol",
-  publisher: "Bitfoniz",
+  authors: [{ name: "Eldvora Protocol", url: "https://eldvora.com" }],
+  creator: "Eldvora Protocol",
+  publisher: "Eldvora",
   robots: {
     index: true,
     follow: true,
@@ -35,17 +35,17 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Bitfoniz — Secure Crypto Investment Platform",
-    description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
-    url: "https://bitfoniz.com",
-    siteName: "Bitfoniz",
+    title: "Eldvora — Secure Crypto Investment Platform",
+    description: "Invest smarter with Eldvora. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
+    url: "https://eldvora.com",
+    siteName: "Eldvora",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bitfoniz — Secure Crypto Investment Platform",
-    description: "Invest smarter with Bitfoniz. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
+    title: "Eldvora — Secure Crypto Investment Platform",
+    description: "Invest smarter with Eldvora. Automated trading protocols, real-time portfolio tracking, and secure crypto investment plans.",
   },
   other: {
     // Advanced Geo Tagging mapping

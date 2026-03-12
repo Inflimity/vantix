@@ -12,7 +12,7 @@ export default function ReferralsClient({ user }: { user: any }) {
 
     // Get protocol and host for the link
     // Use production URL from env or fallback to current origin
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://bitfoniz.icu');
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://eldvora.icu');
     const referralLink = `${baseUrl}/signup?ref=${user.referralCode || user.id}`;
 
     const handleCopy = () => {
@@ -24,7 +24,7 @@ export default function ReferralsClient({ user }: { user: any }) {
     return (
         <div className="animate-fade-in-up">
             <h1 className="text-3xl font-black mb-2">Referral Program</h1>
-            <p className="text-gray-500 mb-8">Earn rewards by inviting friends to Bitfoniz.</p>
+            <p className="text-gray-500 mb-8">Earn rewards by inviting friends to Eldvora.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                 <div className="bg-[#0F172A] border-2 border-[#1E293B] rounded-[30px] p-8">

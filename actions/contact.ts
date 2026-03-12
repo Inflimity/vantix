@@ -27,8 +27,8 @@ export const submitContactForm = async (values: z.infer<typeof ContactSchema>) =
 
     try {
         await resend.emails.send({
-            from: "Bitfoniz Contact <onboarding@resend.dev>",
-            to: "support@bitfoniz.com",
+            from: "Eldvora Contact <onboarding@resend.dev>",
+            to: "support@eldvora.com",
             replyTo: email,
             subject: `[Contact Form] ${subject}`,
             html: `

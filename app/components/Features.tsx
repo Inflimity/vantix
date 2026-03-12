@@ -51,7 +51,7 @@ export default function Features() {
 
             <section id="features" className="py-20 px-6 max-w-7xl mx-auto">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-black mb-4">The Bitfoniz <span className="text-blue-500">Advantage</span></h2>
+                    <h2 className="text-3xl md:text-5xl font-black mb-4">The Eldvora <span className="text-blue-500">Advantage</span></h2>
                     <p className="text-gray-400 max-w-lg mx-auto">We don't just trade. We engineer profit through superior infrastructure.</p>
                 </div>
 

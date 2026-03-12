@@ -195,7 +195,7 @@ function SignupFormContent() {
                             <label className="text-[10px] text-gray-500 leading-tight">
                                 I agree to the{" "}
                                 <span className="text-white font-bold">
-                                    Bitfoniz Protocol Terms
+                                    Eldvora Protocol Terms
                                 </span>{" "}
                                 and conditions.
                             </label>

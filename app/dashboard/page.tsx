@@ -50,7 +50,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
                 <div>
                     <h1 className="text-2xl font-black">Welcome back, {user.fullName}</h1>
-                    <p className="text-gray-500 text-sm">Bitfoniz Protocol is currently monitoring <span className="text-emerald-500">the markets 24/7</span>.</p>
+                    <p className="text-gray-500 text-sm">Eldvora Protocol is currently monitoring <span className="text-emerald-500">the markets 24/7</span>.</p>
                 </div>
                 <div className="flex gap-3">
                     <Link href="/dashboard/deposit" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-sm transition shadow-lg shadow-blue-600/20">Quick Deposit</Link>

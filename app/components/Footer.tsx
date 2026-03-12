@@ -24,7 +24,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className="max-w-7xl mx-auto border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold text-gray-500 uppercase tracking-widest">
-                <p>© 2026 Bitfoniz. All Rights Reserved.</p>
+                <p>© 2026 Eldvora. All Rights Reserved.</p>
                 <p>Designed for Full-Stack Performance</p>
             </div>
         </footer>
